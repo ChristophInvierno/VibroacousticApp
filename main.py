@@ -5,21 +5,32 @@ from bokeh.io import curdoc, show
 from bokeh.models import Div, Label, Plot
 from bokeh.plotting import figure, output_file, show
 from bokeh.models.glyphs import Text
-from bokeh.models.widgets import Button, RadioButtonGroup, Select, Slider, TextInput, AutocompleteInput
+from bokeh.models.widgets import Button, RadioButtonGroup, Select, Slider
+from bokeh.models.widgets import TextInput, AutocompleteInput
+
+
 from bokeh.layouts import widgetbox
 
-from copy import deepcopy
+from copy import deepcopy, copy
 
 # Link third-party python libraries
 from math import cos, sin, radians, sqrt, pi, atan2
 
 # Link custom files
 from LatexSupport import LatexLabel
+from UnicodeSymbols import *
+
+# TODO: change the name of the module
+from InteractiveTable import InteractiveTable
 
 
 def main():
+    # the main function only describes both graphical and comunication
+    # of the app.
 
-    # Create all Widgets
+    #========================== GRAPHICAL PART =================================
+
+    # CREATE ALL PLOTS:
     Input = figure( title = "",
                     tools = "",
                     width = 500,
@@ -30,44 +41,42 @@ def main():
                     tools = "",
                     x_range = (-7, 7),
                     y_range = (-1, 30),
-                    width = 500,
-                    height = 500 )
+                    width = 650,
+                    height = 550 )
+
+    # CREATE TABLES:
+    # ........................ Elastic Modulus table ...........................
+    ELASTIC_MODULUS_TITEL = Div(text="""ELASTIC MODULUS:""")
+    ElasticModulus = InteractiveTable( 3, 3 )
+    ElasticModulus.setTitels([[EMODUL_XX, EMODUL_XY, EMODUL_XZ],
+                              [EMODUL_YX, EMODUL_YY, EMODUL_YZ],
+                              [EMODUL_ZX, EMODUL_ZY, EMODUL_ZZ]])
+
+    ElasticModulus.setValues([["200e9", "200e9", "200e9"],
+                              ["200e9", "200e9", "200e9"],
+                              ["200e9", "200e9", "200e9"]])
 
 
-    # add all text lebels
-    # Elastic Modulus Matrix:
-    ElasticModulus_XX = TextInput(value="200e9", title="Exx:", width=200)
-    ElasticModulus_XY = TextInput(value="200e9", title="Exy:", width=200)
-    ElasticModulus_XZ = TextInput(value="200e9", title="Exz:", width=200)
-    ElasticModulus_X = row(ElasticModulus_XX,
-                           ElasticModulus_XY,
-                           ElasticModulus_XZ)
+    # ........................ Stress Modulus table ............................
+    STRESSES_TITEL = Div(text="""STRESSES:""")
+    StressCoefficients = InteractiveTable(3, 3)
+    StressCoefficients.setTitels([[ SIGMA_XX, SIGMA_XY, SIGMA_XZ],
+                                  [ SIGMA_YX, SIGMA_YY, SIGMA_YZ],
+                                  [ SIGMA_ZX, SIGMA_ZY, SIGMA_ZZ]])
+
+    StressCoefficients.setValues([["150", "150", "150"],
+                                  ["150", "150", "150"],
+                                  ["150", "150", "150"]])
 
 
-    ElasticModulus_YX = TextInput(value="200e9", title="Eyx:", width=200)
-    ElasticModulus_YY = TextInput(value="200e9", title="Eyy:", width=200)
-    ElasticModulus_YZ = TextInput(value="200e9", title="Eyz:", width=200)
-    ElasticModulus_Y = row(ElasticModulus_YX,
-                           ElasticModulus_YY,
-                           ElasticModulus_YZ)
+    # ........................ Material Properties table .......................
+    PROPERTIES_TITEL = Div(text="""MATERIAL PROPERTIES:""")
+    MaterialProperties = InteractiveTable(1, 2)
+    MaterialProperties.setTitels([[ "Dumping", "Density"]])
+    MaterialProperties.setValues([["2.0", "7850"]])
 
 
-    ElasticModulus_ZX = TextInput(value="200e9", title="Ezx:", width=200)
-    ElasticModulus_ZY = TextInput(value="200e9", title="Ezy:", width=200)
-    ElasticModulus_ZZ = TextInput(value="200e9", title="Ezz:", width=200)
-    ElasticModulus_Z = row(ElasticModulus_ZX,
-                           ElasticModulus_ZY,
-                           ElasticModulus_ZZ)
-
-
-    ElasticModulus = column( ElasticModulus_X,
-                             ElasticModulus_Y,
-                             ElasticModulus_Z )
-
-
-
-
-    # Declare all buttons
+    # CREATE BUTTONS:
     ApplyButton = Button( label = "Apply",
                           button_type = "success",
                           width = 100)
@@ -76,6 +85,7 @@ def main():
     PrintReport = Button( label = "Print Report",
                           button_type = "success",
                           width = 100 )
+
 
     ModeRadioButtons = RadioButtonGroup( labels = [ "Homogeneous mode",
                                                     "Non-Homogeneous mode" ],
@@ -92,14 +102,34 @@ def main():
                                      active = 0 )
 
 
-    Buttons = row( Spacer(width=175), column( ApplyButton, PrintReport ) )
+    # SPECIFY THE LAYOUT:
+    Buttons = row( row( Spacer( width = 185 ),
+                        ApplyButton,
+                        Spacer( width = 50 ),
+                        PrintReport ) )
 
-    RightSide = column( ModeRadioButtons, ElasticModulus, Buttons )
-    LeftSide = column( GraphRadioButtons, Graph )
+    RightSide = column( ModeRadioButtons,
+                        ELASTIC_MODULUS_TITEL,
+                        ElasticModulus.Table,
+                        STRESSES_TITEL,
+                        StressCoefficients.Table,
+                        PROPERTIES_TITEL,
+                        MaterialProperties.Table )
+    LeftSide = column( GraphRadioButtons, Graph, Buttons )
 
-    # depict all widgets
+
+    # ========================= COMMUNICATION PART =============================
+    # TODO: set up all call back function
+    # 1: read information from the text input labels
+    # 2: pass that information to the corresponding functions
+
+
+
+    # DEPICT ALL WIDJETS
     curdoc().add_root( column( Spacer( height = 20 ),
-                               row( RightSide, LeftSide ) ) )
+                               row( RightSide,
+                                    Spacer( width = 50 ),
+                                    LeftSide ) ) )
 
 
 main()
