@@ -89,6 +89,10 @@ def main():
 
 
     # CREATE BUTTONS:
+    SetDefaultButton = Button(label = "Default",
+                         button_type = "success",
+                         width = 100)
+
     ApplyButton = Button( label = "Apply",
                           button_type = "success",
                           width = 100)
@@ -116,10 +120,13 @@ def main():
 
 
     # SPECIFY THE LAYOUT:
-    Buttons = row( row( Spacer( width = 185 ),
+    Buttons = row( row( Spacer( width = 115 ),
+                        SetDefaultButton,
+                        Spacer( width = 50 ),
                         ApplyButton,
                         Spacer( width = 50 ),
                         PrintReport ) )
+
 
 
     RightSide = column( ModeRadioButtons,
@@ -133,6 +140,7 @@ def main():
                         MaterialProperties.Table,
                         GEOMETRY_TITEL,
                         GeometryProperties.Table )
+
     LeftSide = column( GraphRadioButtons, Graph, Buttons )
 
 
@@ -184,6 +192,16 @@ def main():
                                          Mode ) )
 
 
+    SetDefaultButton.on_click( partial ( setDeafultSettings,
+                                         ElasticModulus,
+                                         ShearModulus,
+                                         PoissonRatios,
+                                         MaterialProperties,
+                                         GeometryProperties,
+                                         Mode,
+                                         GraphRadioButtons ) )
+
+
     # ================= RUN SIMULATION WITH DEFAULT DATA =====================
     updateData( Data,
                 Graph,
@@ -201,9 +219,7 @@ def main():
                   Arguments,
                   Functions,
                   Data,
-                  1 )
-
-
+                  0 )
 
 
     # DEPICT ALL WIDJETS
@@ -236,6 +252,10 @@ def updateData( Data,
                 GeometryProperties,
                 Mode )
 
+    precomputePoissonRatios( ElasticModulus,
+                             ShearModulus,
+                             PoissonRatios )
+
 
     ElasticModulusData = ElasticModulus.getData()
     ShearModulusData = ShearModulus.getData()
@@ -249,19 +269,31 @@ def updateData( Data,
     # lists
 
 
+    Arguments[ 0 ] = [ i for i in range(-7,8) ]
+    Functions[ 0 ] = [ i**2 for i in range(-7,8) ]
+
+
+    Arguments[ 1 ] = [ i for i in range(-7,8) ]
+    Functions[ 1 ] = [ 3*sin(i)+3 for i in range(-7,8) ]
+
+    Arguments[ 2 ] = [ i for i in range(-7,8) ]
+    Functions[ 2 ] = [ 3*cos(i)+3 for i in range(-7,8) ]
+
+    Arguments[ 3 ] = [ i for i in range(-7,8) ]
+    Functions[ 3 ] = [ abs(3*i) for i in range(-7,8) ]
+
+
 def updateGraph( NUMBER_OF_FUNCTIONS,
-                 Argument,
+                 Arguments,
                  Functions,
                  Data,
                  GraphNumber ):
 
-    Argument[ GraphNumber ] = [ 1, 2 ]
-    Functions[ GraphNumber ] = [ 1, 2 ]
     #TODO: check lengths of two lists and raise an exeption if
     # the lengths are different
     #if len( Argument ) == len( FunctionOne ):
 
-    Data.data = dict( XData = Argument[ GraphNumber ],
+    Data.data = dict( XData = Arguments[ GraphNumber ],
                       YData = Functions[ GraphNumber ] )
 
 
@@ -296,7 +328,9 @@ def cangeMode( ElasticModulus,
         ElasticModulus.setValue( 0, 2, UniformValue )
 
 
-        UniformValue = ShearModulus.getValue( 0, 0 )
+        UniformValue = str( ElasticModulus.getFloatValue( 0, 0 ) \
+                            / ( 2.0 * ( 1.0 + PoissonRatios.getFloatValue( 0, 0 ) ) ) )
+        ShearModulus.setValue( 0, 0, UniformValue )
         ShearModulus.setValue( 0, 1, UniformValue )
         ShearModulus.setValue( 0, 2, UniformValue )
 
@@ -323,12 +357,58 @@ def cangeMode( ElasticModulus,
         ElasticModulus.restoreValue( 0, 1 )
         ElasticModulus.restoreValue( 0, 2 )
 
+        ShearModulus.restoreValue( 0, 0 )
         ShearModulus.restoreValue( 0, 1 )
         ShearModulus.restoreValue( 0, 2 )
 
         PoissonRatios.restoreValue( 0, 1 )
         PoissonRatios.restoreValue( 0, 2 )
 
+
+    precomputePoissonRatios( ElasticModulus,
+                             ShearModulus,
+                             PoissonRatios )
+
+
+
+def precomputePoissonRatios( ElasticModulus,
+                             ShearModulus,
+                             PoissonRatios ):
+
+    # update value of nu_21
+    Temp = PoissonRatios.getFloatValue(0,0) * ElasticModulus.getFloatValue(0,1) \
+         / ElasticModulus.getFloatValue(0,0)
+    PoissonRatios.assignValue( 1, 0, str(Temp) )
+
+    # update value of nu_31
+    Temp = PoissonRatios.getFloatValue(0,1) * ElasticModulus.getFloatValue(0,2) \
+           / ElasticModulus.getFloatValue(0,0)
+    PoissonRatios.assignValue( 1, 1, str(Temp) )
+
+    # update value of nu_32
+    Temp = PoissonRatios.getFloatValue(0,2) * ElasticModulus.getFloatValue(0,2) \
+         / ElasticModulus.getFloatValue(0,1)
+    PoissonRatios.assignValue( 1, 2, str(Temp) )
+
+
+def setDeafultSettings( ElasticModulus,
+                        ShearModulus,
+                        PoissonRatios,
+                        MaterialProperties,
+                        GeometryProperties,
+                        Mode,
+                        Widget ):
+
+    ElasticModulus.resetByDefault()
+    ShearModulus.resetByDefault()
+    PoissonRatios.resetByDefault()
+
+    cangeMode( ElasticModulus,
+               ShearModulus,
+               PoissonRatios,
+               MaterialProperties,
+               GeometryProperties,
+               Mode )
 
 
 main()

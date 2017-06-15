@@ -1,13 +1,15 @@
 from bokeh.layouts import widgetbox
 from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row, Spacer
+from copy import deepcopy
 
 import numpy as np
+from copy import deepcopy
+
 
 class TableCorrupted(Exception):
     pass
 
-from copy import deepcopy
 
 class InteractiveTable:
     MINIMUM_WIDGET_HEIGHT = 1
@@ -87,8 +89,9 @@ class InteractiveTable:
 
 
         # initilize buffers by default values
-        self.__ValueBuffer = Values
-        self.__DefaultValues = Values
+        self.__DefaultValues = deepcopy(Values)
+        self.__ValueBuffer = deepcopy(Values)
+
 
 
         for Row, i in zip( Values, range( len( Values ) ) ):
@@ -115,9 +118,25 @@ class InteractiveTable:
             self.__ModeCounter[ aRow ][ aColumn ] = 0
 
 
+    def assignValue(self, aRow, aColumn, Value ):
+        self.__Widgets[ aRow ][ aColumn ].value = str( Value )
+
 
     def getValue(self, aRow, aColumn ):
         return self.__Widgets[ aRow ][ aColumn ].value
+
+
+    def getFloatValue(self, aRow, aColumn ):
+        return float( self.__Widgets[ aRow ][ aColumn ].value )
+
+
+    def resetByDefault(self):
+
+        self.__ValueBuffer = deepcopy( self.__DefaultValues )
+        for i in range( self.__nRows ) :
+            for j in range( self.__nColumns ):
+                self.__Widgets[ i ][ j ].value = self.__DefaultValues[ i ][ j ]
+
 
 
     def getData( self ):
