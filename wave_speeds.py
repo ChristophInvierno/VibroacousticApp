@@ -9,7 +9,6 @@ def wave_speeds( ElasticModulusData,
                  MaterialPropertiesData,
                  GeometryPropertiesData,
                  Isotrop,
-                 Function,
                  freq ):
     # Isotrop is a boolean
 

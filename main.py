@@ -20,6 +20,7 @@ from Helper import Flag
 from wave_speeds import *
 from wave_speeds import *
 from Graphs import *
+from GraphClass import GraphObject
 
 # TODO: change the name of the module
 from InteractiveTable import InteractiveTable
@@ -27,12 +28,12 @@ from InteractiveTable import InteractiveTable
 
 def main( ):
     # Quasi constant
-    FrequencyRange = np.linspace( 0, 1000001, num = 1000 ) + 1
+    FrequencyRange = np.linspace( 0, 100001, num = 1000 ) + 1
     # the main function only describes both graphical and comunication
     # of the app.
 
 
-    # ========================== GRAPHICAL PART =================================
+    # ========================== GRAPHICAL PART ================================
 
     # CREATE ALL PLOTS:
     Input = figure( title = "",
@@ -40,10 +41,17 @@ def main( ):
                     width = 500,
                     height = 500 )
 
-    Graph = figure( title = "",
-                    tools = "",
-                    width = 650,
-                    height = 550 )
+
+    Graph = GraphObject( [ "Wave speed",
+                           "Modes in Band",
+                           "Modal Overlap Factor",
+                           "Natural Frequencies",
+                           "Limit frequencies",
+                           "Wavelength - element size for FEM" ],
+                            FrequencyRange)
+
+    #Graph.setLogAxis( )
+
 
     # CREATE TABLES:
     # ........................ Elastic Modulus table ...........................
@@ -52,11 +60,13 @@ def main( ):
     ElasticModulus.setTitels( [ [ EMODUL_X, EMODUL_Y, EMODUL_Z ] ] )
     ElasticModulus.setValues( [ [ "1.061e10", "7.605e08", "3.667e08" ] ] )
 
+
     # ........................ Shear Modulus table .............................
     SHEAR_MODULUS_TITEL = Div( text = """SHEAR MODULUS:""" )
     ShearModulus = InteractiveTable( 1, 3 )
     ShearModulus.setTitels( [ [ EMODUL_XY, EMODUL_XZ, EMODUL_YZ ] ] )
     ShearModulus.setValues( [ [ "6.900e08", "1.725e08", "9.857e07" ] ] )
+
 
     # ........................ Poisson’s ratios ................................
     POISSON_RATIO_TITEL = Div( text = """POISSON'S RATIOS:""" )
@@ -68,8 +78,10 @@ def main( ):
                                  POISSON_RATIO_ZX + "\t( auto )",
                                  POISSON_RATIO_ZY + "\t( auto )" ] ] )
 
+
     PoissonRatios.setValues( [ [ "1.184", "1.771", "0.382" ],
                                [ "0.085", "0.061", "0.184" ] ] )
+
 
     # ........................ Material Properties table .......................
     MATERIALS_TITEL = Div( text = """MATERIAL PROPERTIES:""" )
@@ -77,38 +89,35 @@ def main( ):
     MaterialProperties.setTitels( [ [ "Density", "Loss Factor" ] ] )
     MaterialProperties.setValues( [ [ "450.0", "0.012" ] ] )
 
+
     # ........................ Geometry table .......................
     GEOMETRY_TITEL = Div( text = """GEOMETRY:""" )
     GeometryProperties = InteractiveTable( 1, 3 )
     GeometryProperties.setTitels( [ [ "Length", "Width", "Thickness" ] ] )
     GeometryProperties.setValues( [ [ "2.5", "3.0", "0.081" ] ] )
 
+
     # CREATE BUTTONS:
     SetDefaultButton = Button( label = "Default",
                                button_type = "success",
                                width = 100 )
 
+
     ApplyButton = Button( label = "Apply",
                           button_type = "success",
                           width = 100 )
 
+
     PrintReport = Button( label = "Print Report",
                           button_type = "success",
                           width = 100 )
+
 
     ModeRadioButtons = RadioButtonGroup( labels = [ "Orthotropic Material",
                                                     "Isotropic Material" ],
                                          width = 500,
                                          active = 0 )
 
-    GraphRadioButtons = RadioButtonGroup( labels = [ "Wave speed",
-                                                     "Modes in Band",
-                                                     "Modal Overlap Factor",
-                                                     "Natural Frequencies",
-                                                     "Limit frequencies",
-                                                     "Wavelength - element size for FEM" ],
-                                          width = 500,
-                                          active = 0 )
 
     # SPECIFY THE LAYOUT:
     Buttons = row( row( Spacer( width = 115 ),
@@ -118,7 +127,9 @@ def main( ):
                         Spacer( width = 50 ),
                         PrintReport ) )
 
-    RightSide = column( ModeRadioButtons,
+
+
+    LeftSide = column( ModeRadioButtons,
                         ELASTIC_MODULUS_TITEL,
                         ElasticModulus.Table,
                         SHEAR_MODULUS_TITEL,
@@ -130,69 +141,22 @@ def main( ):
                         GEOMETRY_TITEL,
                         GeometryProperties.Table )
 
-    LeftSide = column( GraphRadioButtons, Graph, Buttons )
+    RightSide = column( Graph.Widget , Buttons )
 
     # ========================= COMMUNICATION PART =============================
-    Mode = Flag( GraphRadioButtons.active )
-    GraphID= Flag( GraphRadioButtons.active )
 
     # set up the line and corresponding colors within the plot
-    MAX_NUMBER_OF_LINES = 24
-    LINE_COLORS = [ "black",  "black",  "black",  "black",
-                    "blue",   "blue",   "blue",   "blue",
-                    "green",  "green",  "green",  "green",
-                    "red",    "red",    "red",    "red",
-                    "orange", "orange", "orange", "orange",
-                    "pink",   "pink",   "pink",   "pink" ]
 
-    LINE_TYPE = [ 'solid', 'dashed', 'dotdash', 'dashdot',
-                  'solid', 'dashed', 'dotdash', 'dashdot',
-                  'solid', 'dashed', 'dotdash', 'dashdot',
-                  'solid', 'dashed', 'dotdash', 'dashdot',
-                  'solid', 'dashed', 'dotdash', 'dashdot',
-                  'solid', 'dashed', 'dotdash', 'dashdot' ]
-
-
-    # initialize the default data of lines
-    Data = [ ]
-    for i in range( MAX_NUMBER_OF_LINES ):
-        Data.append( ColumnDataSource( data = dict( XData = [ 0 ], YData = [ 0 ] ) ) )
-
-        Graph.line( x = 'XData',
-                    y = 'YData',
-                    color = LINE_COLORS[ i ],
-                    line_dash = LINE_TYPE[ i ],
-                    source = Data[ i ] )
-
-
-    NUMBER_OF_FUNCTIONS = 6
-    Functions = range( 0, NUMBER_OF_FUNCTIONS )
 
     # Set up callback function for the "Apply" button
     ApplyButton.on_click( partial( updateData,
-                                   Data,
                                    ElasticModulus,
                                    ShearModulus,
                                    PoissonRatios,
                                    MaterialProperties,
                                    GeometryProperties,
-                                   Functions,
-                                   FrequencyRange,
-                                   Mode,
-                                   GraphID,
-                                   Graph ) )
+                                   Graph) )
 
-
-    # Set up callback function for all radion buttons that are responsible
-    # for plotting different graphs
-    GraphRadioButtons.on_click( partial( updateGraph,
-                                         NUMBER_OF_FUNCTIONS,
-                                         FrequencyRange,
-                                         Functions,
-                                         Data,
-                                         Graph,
-                                         Mode,
-                                         GraphID ) )
 
     # Set up callback function for all radion buttons that are responsible
     # for changing the mode, namely: Isotropic and Orthotropic material properties
@@ -202,7 +166,13 @@ def main( ):
                                         PoissonRatios,
                                         MaterialProperties,
                                         GeometryProperties,
-                                        Mode ) )
+                                        Graph ) )
+
+
+    # Set up callback function for all radion buttons that are responsible
+    # for plotting different graphs
+    Graph.GraphRadioButtons.on_click( partial( updateGraph, Graph ) )
+
 
     # Set up callback function for all the "Default" button that are responsible
     # for assigning the default data to all entries
@@ -212,54 +182,36 @@ def main( ):
                                         PoissonRatios,
                                         MaterialProperties,
                                         GeometryProperties,
-                                        Mode,
-                                        GraphRadioButtons ) )
+                                        Graph ) )
 
 
     # ================= RUN SIMULATION WITH DEFAULT DATA =====================
-    updateData( Data,
-                ElasticModulus,
+    updateData( ElasticModulus,
                 ShearModulus,
                 PoissonRatios,
                 MaterialProperties,
                 GeometryProperties,
-                Functions,
-                FrequencyRange,
-                Mode,
-                GraphID,
                 Graph )
 
 
-    updateGraph( NUMBER_OF_FUNCTIONS,
-                 FrequencyRange,
-                 Functions,
-                 Data,
-                 Graph,
-                 Mode,
-                 GraphID,
-                 0 )
+    updateGraph( Graph, 0 )
 
 
     # RUN ALL WIDJETS
     curdoc( ).add_root( column( Spacer( height = 20 ),
-                                row( RightSide,
+                                row( LeftSide,
                                      Spacer( width = 50 ),
-                                     LeftSide ) ) )
+                                     RightSide ) ) )
 
 
 # ===============================================================================
 #                               HELPER FUNCTIONS
 # ===============================================================================
-def updateData( Data,
-                ElasticModulus,
+def updateData( ElasticModulus,
                 ShearModulus,
                 PoissonRatios,
                 MaterialProperties,
                 GeometryProperties,
-                Functions,
-                FrequencyRange,
-                Mode,
-                GraphID,
                 Graph ):
 
 
@@ -269,7 +221,7 @@ def updateData( Data,
                PoissonRatios,
                MaterialProperties,
                GeometryProperties,
-               Mode )
+               Graph.getMode() )
 
 
     precomputePoissonRatios( ElasticModulus,
@@ -286,56 +238,44 @@ def updateData( Data,
 
     #################### CALL USER-SPECIFIC FAUNCTION ##########################
 
-    Functions[ 0 ] = wave_speeds( ElasticModulusData,
-                                  ShearModulusData,
-                                  PoissonRatiosData,
-                                  MaterialPropertiesData,
-                                  GeometryPropertiesData,
-                                  bool( Mode.getFlag ),
-                                  Functions,
-                                  FrequencyRange )
+    Graph.Functions[ 0 ] = wave_speeds( ElasticModulusData,
+                                        ShearModulusData,
+                                        PoissonRatiosData,
+                                        MaterialPropertiesData,
+                                        GeometryPropertiesData,
+                                        bool( Graph.getMode() ),
+                                        Graph.getRange() )
 
 
     # Update the current graph with new data
-    updateGraph( 6,
-                 FrequencyRange,
-                 Functions,
-                 Data,
-                 Graph,
-                 Mode,
-                 GraphID,
-                 GraphID.getFlag() )
+
+    updateGraph( Graph,
+                 Graph.getCurrentGraphNumber() )
 
 
 
-def updateGraph( NUMBER_OF_FUNCTIONS,
-                 FrequencyRange,
-                 Functions,
-                 GraphData,
-                 Graph,
-                 Mode,
-                 GraphID,
-                 GraphNumber ):
+
+def updateGraph( Graph, GraphNumber ):
+
 
     # Update the graph ID ( GraphNumber - it's a built-in bohek variable that
     # belongs to the RadioButton widget )
-    GraphID.setFlag( GraphNumber )
+    Graph.setPlottingGraphNumber( GraphNumber )
 
 
     # Remove existing lines from the plot bokeh widget
-    cleanPlots( GraphData )
+    Graph.removeLines()
 
 
     # Depict coresponding lines based on the graph chosen by the user
     if (GraphNumber == 0):
-        plotWaveSpeedGraph( Graph,
-                            GraphData,
-                            Functions[ 0 ],
-                            FrequencyRange,
-                            Mode )
+        Graph.setLogAxis( )
+        plotWaveSpeedGraph( Graph )
 
     if (GraphNumber == 1):
-        Graph.line(Functions[ 0 ][ 0 ],FrequencyRange )
+        Graph.setLinearAxis( )
+        plotWaveSpeedGraph( Graph )
+        pass
 
 
 
@@ -344,18 +284,18 @@ def updateMode( ElasticModulus,
                 PoissonRatios,
                 MaterialProperties,
                 GeometryProperties,
-                Mode,
+                Graph,
                 Properties ):
 
 
-    Mode.setFlag( Properties )
+    Graph.setMode( Properties )
 
     cangeMode( ElasticModulus,
                ShearModulus,
                PoissonRatios,
                MaterialProperties,
                GeometryProperties,
-               Mode )
+               Graph.getMode() )
 
 
 def cangeMode( ElasticModulus,
@@ -366,7 +306,7 @@ def cangeMode( ElasticModulus,
                Mode ):
 
 
-    if (Mode.getFlag( ) == 1):
+    if ( Mode == 1 ):
 
         UniformValue = ElasticModulus.getValue( 0, 0 )
         ElasticModulus.setValue( 0, 1, UniformValue )
@@ -384,7 +324,7 @@ def cangeMode( ElasticModulus,
         PoissonRatios.setValue( 0, 2, UniformValue )
 
 
-    if (Mode.getFlag( ) == 0):
+    if ( Mode == 0 ):
         ElasticModulus.restoreValue( 0, 1 )
         ElasticModulus.restoreValue( 0, 2 )
 
@@ -427,8 +367,7 @@ def setDeafultSettings( ElasticModulus,
                         PoissonRatios,
                         MaterialProperties,
                         GeometryProperties,
-                        Mode,
-                        Widget ):
+                        Graph ):
 
 
     ElasticModulus.resetByDefault( )
@@ -441,7 +380,7 @@ def setDeafultSettings( ElasticModulus,
                PoissonRatios,
                MaterialProperties,
                GeometryProperties,
-               Mode )
+               Graph.getMode() )
 
 
 main( )
