@@ -13,3 +13,7 @@ class Flag:
 
     def setFlag(self, Input ):
         self.__Value = Input
+
+
+    def getFlag(self):
+        return self.__Value
