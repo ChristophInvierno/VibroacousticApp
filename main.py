@@ -68,7 +68,7 @@ def main( ):
     ShearModulus.setValues( [ [ "6.900e08", "1.725e08", "9.857e07" ] ] )
 
 
-    # ........................ Poisson’s ratios ................................
+    # ........................ Poissons ratios ................................
     POISSON_RATIO_TITEL = Div( text = """POISSON'S RATIOS:""" )
     PoissonRatios = InteractiveTable( 2, 3 )
     PoissonRatios.setTitels( [ [ POISSON_RATIO_XY,
@@ -195,7 +195,6 @@ def main( ):
 
 
     updateGraph( Graph, 0 )
-
 
     # RUN ALL WIDJETS
     curdoc( ).add_root( column( Spacer( height = 20 ),

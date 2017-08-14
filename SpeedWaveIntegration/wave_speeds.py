@@ -345,8 +345,8 @@ def wave_speeds( ElasticModulusData,
     #for First, Second, Third, Fourth in zip(c_B, c_B_eff, c_B_eff_1, c_B_eff_2):
 
    # print f_thickmode_shear
-    plt.plot( x , Function2[0] )
-    plt.show()
+    #plt.plot( x , Function2[0] )
+    #plt.show()
 
 
 main()

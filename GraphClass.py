@@ -178,10 +178,8 @@ class GraphObject:
     def setLogAxis(self):
         self.Graph.x_mapper_type='log'
         self.Graph.y_mapper_type='log'
-        print "HELLO from log"
 
 
     def setLinearAxis(self):
         self.Graph.x_mapper_type='linear'
         self.Graph.y_mapper_type='linear'
-        print "HELLO from linear "

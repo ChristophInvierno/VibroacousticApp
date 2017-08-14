@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def plotWaveSpeedGraph( GraphInstance ):
     #print GraphInstance.Functions[ 0 ][ 0 ]
 
@@ -167,4 +169,12 @@ def plotWaveSpeedGraph( GraphInstance ):
     # TODO: c_S_outofplane_1 is equal to zero. Ask Peer about that
     # TODO: c_S_outofplane_2 is equal to zero. Ask Peer about that
 
-    pass
+    #plt.plot(GraphInstance.getRange() , GraphInstance.Functions[ 0 ][ 0 ])
+    plt.loglog( GraphInstance.getRange(), GraphInstance.Functions[ 0 ][ 0 ],
+                GraphInstance.getRange( ), GraphInstance.Functions[ 0 ][ 1 ],
+                GraphInstance.getRange( ), GraphInstance.Functions[ 0 ][ 3 ],
+                GraphInstance.getRange( ), GraphInstance.Functions[ 0 ][ 4 ],
+                basex = 2 )
+
+    plt.savefig( 'FirstMode.png' )
+    #plt.show()
