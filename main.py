@@ -1,12 +1,14 @@
 # Link bokeh libraries
 from bokeh.plotting import figure
 from bokeh.layouts import column, row, Spacer
-from bokeh.io import curdoc, show
+from bokeh.io import curdoc, show, set_curdoc
 from bokeh.models import Div, Label, Plot, ColumnDataSource
 from bokeh.plotting import figure, output_file, show
 from bokeh.models.glyphs import Text
 from bokeh.models.widgets import Button, RadioButtonGroup, Select, Slider
 from bokeh.models.widgets import TextInput, AutocompleteInput
+from bokeh.plotting import figure
+
 
 # Link third-party python libraries
 from math import cos, sin, radians, sqrt, pi, atan2
@@ -31,7 +33,7 @@ def main( ):
     FrequencyRange = np.linspace( 0, 100001, num = 1000 ) + 1
     # the main function only describes both graphical and comunication
     # of the app.
-
+    doc = curdoc()
 
     # ========================== GRAPHICAL PART ================================
 
@@ -120,7 +122,7 @@ def main( ):
 
 
     # SPECIFY THE LAYOUT:
-    Buttons = row( row( Spacer( width = 115 ),
+    Buttons = row( row( Spacer( width = 125 ),
                         SetDefaultButton,
                         Spacer( width = 50 ),
                         ApplyButton,
@@ -143,6 +145,12 @@ def main( ):
 
     RightSide = column( Graph.Widget , Buttons )
 
+    WIDGETS = column( Spacer( height = 20 ),
+                      row( LeftSide,
+                           Spacer( width = 50 ),
+                           RightSide,
+                           Spacer( width = 50 ) ) )
+
     # ========================= COMMUNICATION PART =============================
 
     # set up the line and corresponding colors within the plot
@@ -155,7 +163,9 @@ def main( ):
                                    PoissonRatios,
                                    MaterialProperties,
                                    GeometryProperties,
-                                   Graph) )
+                                   Graph,
+                                   WIDGETS,
+                                   doc ) )
 
 
     # Set up callback function for all radion buttons that are responsible
@@ -191,16 +201,17 @@ def main( ):
                 PoissonRatios,
                 MaterialProperties,
                 GeometryProperties,
-                Graph )
+                Graph,
+                WIDGETS,
+                doc )
 
 
     updateGraph( Graph, 0 )
 
+
     # RUN ALL WIDJETS
-    curdoc( ).add_root( column( Spacer( height = 20 ),
-                                row( LeftSide,
-                                     Spacer( width = 50 ),
-                                     RightSide ) ) )
+    doc.add_root( WIDGETS )
+
 
 
 # ===============================================================================
@@ -211,8 +222,12 @@ def updateData( ElasticModulus,
                 PoissonRatios,
                 MaterialProperties,
                 GeometryProperties,
-                Graph ):
+                Graph,
+                WIDGETS,
+                doc ):
 
+    #set_curdoc(doc)
+    #.add_root( WIDGETS )
 
     # before calling user-define functions check the current mode
     cangeMode( ElasticModulus,
@@ -275,7 +290,6 @@ def updateGraph( Graph, GraphNumber ):
         Graph.setLinearAxis( )
         plotWaveSpeedGraph( Graph )
         pass
-
 
 
 def updateMode( ElasticModulus,
