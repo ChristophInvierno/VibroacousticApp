@@ -14,15 +14,21 @@ from bokeh.plotting import figure
 from math import cos, sin, radians, sqrt, pi, atan2
 from functools import partial
 import matplotlib.pyplot as plt
+import threading
+from multiprocessing import Process
+import time
 
 # Link custom files
 from LatexSupport import LatexLabel
 from UnicodeSymbols import *
-from Helper import Flag
-from wave_speeds import *
+from Helper import Flag, DataCorrupted, testInputData
 from wave_speeds import *
 from Graphs import *
 from GraphClass import GraphObject
+from MessageClass import Message
+from ModaleDichte import ModaleDichte
+from Functions import *
+
 
 # TODO: change the name of the module
 from InteractiveTable import InteractiveTable
@@ -45,11 +51,12 @@ def main( ):
 
 
     Graph = GraphObject( [ "Wave speed",
+                           "Wave Velocities plus Limit Frequencies",
                            "Modes in Band",
+                           "Modal Density",
                            "Modal Overlap Factor",
-                           "Natural Frequencies",
-                           "Limit frequencies",
-                           "Wavelength - element size for FEM" ],
+                           "Maximum Element Size (FEM)",
+                           "Natural Frequencies" ],
                             FrequencyRange)
 
     #Graph.setLogAxis( )
@@ -120,9 +127,11 @@ def main( ):
                                          width = 500,
                                          active = 0 )
 
+    WarningMessage = Message( "Warning: " );
+
 
     # SPECIFY THE LAYOUT:
-    Buttons = row( row( Spacer( width = 125 ),
+    Buttons = row( row( Spacer( width = 175 ),
                         SetDefaultButton,
                         Spacer( width = 50 ),
                         ApplyButton,
@@ -141,15 +150,11 @@ def main( ):
                         MATERIALS_TITEL,
                         MaterialProperties.Table,
                         GEOMETRY_TITEL,
-                        GeometryProperties.Table )
+                        GeometryProperties.Table,
+                        WarningMessage.Widget )
 
     RightSide = column( Graph.Widget , Buttons )
 
-    WIDGETS = column( Spacer( height = 20 ),
-                      row( LeftSide,
-                           Spacer( width = 50 ),
-                           RightSide,
-                           Spacer( width = 50 ) ) )
 
     # ========================= COMMUNICATION PART =============================
 
@@ -164,8 +169,7 @@ def main( ):
                                    MaterialProperties,
                                    GeometryProperties,
                                    Graph,
-                                   WIDGETS,
-                                   doc ) )
+                                   WarningMessage ) )
 
 
     # Set up callback function for all radion buttons that are responsible
@@ -176,6 +180,7 @@ def main( ):
                                         PoissonRatios,
                                         MaterialProperties,
                                         GeometryProperties,
+                                        WarningMessage,
                                         Graph ) )
 
 
@@ -192,7 +197,8 @@ def main( ):
                                         PoissonRatios,
                                         MaterialProperties,
                                         GeometryProperties,
-                                        Graph ) )
+                                        Graph,
+                                        WarningMessage ) )
 
 
     # ================= RUN SIMULATION WITH DEFAULT DATA =====================
@@ -202,15 +208,18 @@ def main( ):
                 MaterialProperties,
                 GeometryProperties,
                 Graph,
-                WIDGETS,
-                doc )
+                WarningMessage )
 
 
-    updateGraph( Graph, 0 )
+    #updateGraph( Graph, 0 )
 
 
     # RUN ALL WIDJETS
-    doc.add_root( WIDGETS )
+    doc.add_root( column( Spacer( height = 20 ),
+                      row( LeftSide,
+                           Spacer( width = 50 ),
+                           RightSide,
+                           Spacer( width = 50 ) ) ) )
 
 
 
@@ -223,11 +232,11 @@ def updateData( ElasticModulus,
                 MaterialProperties,
                 GeometryProperties,
                 Graph,
-                WIDGETS,
-                doc ):
+                WarningMessage ):
 
-    #set_curdoc(doc)
-    #.add_root( WIDGETS )
+    # clean the warning message
+    WarningMessage.clean()
+
 
     # before calling user-define functions check the current mode
     cangeMode( ElasticModulus,
@@ -235,6 +244,7 @@ def updateData( ElasticModulus,
                PoissonRatios,
                MaterialProperties,
                GeometryProperties,
+               WarningMessage,
                Graph.getMode() )
 
 
@@ -251,22 +261,116 @@ def updateData( ElasticModulus,
 
 
     #################### CALL USER-SPECIFIC FAUNCTION ##########################
+    try:
 
-    Graph.Functions[ 0 ] = wave_speeds( ElasticModulusData,
-                                        ShearModulusData,
-                                        PoissonRatiosData,
-                                        MaterialPropertiesData,
-                                        GeometryPropertiesData,
-                                        bool( Graph.getMode() ),
-                                        Graph.getRange() )
+        print Graph.getMode()
+
+        WarningMessage.printMessage("Running")
+
+        testInputData( Graph.getMode(), PoissonRatiosData )
+
+        Graph.Functions[ 0 ] = wave_speeds( ElasticModulusData,
+                                            ShearModulusData,
+                                            PoissonRatiosData,
+                                            MaterialPropertiesData,
+                                            GeometryPropertiesData,
+                                            bool( Graph.getMode() ),
+                                            Graph.getRange() )
 
 
-    # Update the current graph with new data
+        Graph.Functions[ 2 ] = ModesInBand( ElasticModulusData,
+                                            ShearModulusData,
+                                            PoissonRatiosData,
+                                            MaterialPropertiesData,
+                                            GeometryPropertiesData,
+                                            bool( Graph.getMode( ) ),
+                                            Graph.getRange( ) )
 
-    updateGraph( Graph,
-                 Graph.getCurrentGraphNumber() )
+
+        Graph.Functions[ 3 ] = ModaleDichte( Graph.Functions[ 0 ][ 9 ],
+                                             Graph.Functions[ 0 ][ 5 ],
+                                             Graph.Functions[ 0 ][ 1 ],
+                                             Graph.Functions[ 0 ][ 4 ],
+                                             GeometryPropertiesData,
+                                             bool( Graph.getMode( ) ),
+                                             Graph.getRange( ) )
 
 
+        Graph.Functions[ 4 ] = ModalOverlapFactor( MaterialPropertiesData,
+                                                   Graph.Functions[ 3 ],
+                                                   Graph.getRange( ) )
+
+
+        Graph.Functions[ 5 ] = MaximumElementSize( Graph.Functions[ 0 ][ 0 ],
+                                                   Graph.Functions[ 0 ][ 1 ],
+                                                   Graph.getRange( ) )
+
+
+        Graph.Functions[ 6 ] = EigenfrequenciesPlate( ElasticModulusData,
+                                                      ShearModulusData,
+                                                      PoissonRatiosData,
+                                                      MaterialPropertiesData,
+                                                      GeometryPropertiesData,
+                                                      bool( Graph.getMode() ),
+                                                      Graph.getRange() )
+
+        Graph.removeAll()
+        Graph.inceremetImageCounter()
+        prepareGraph( Graph )
+
+        # Update the current graph with new data
+        updateGraph( Graph,
+                     Graph.getCurrentGraphNumber( ) )
+
+        WarningMessage.clean()
+
+
+    except DataCorrupted as Error:
+        WarningMessage.printMessage( str(Error) )
+
+
+def prepareGraph( Graph ):
+
+    tic = time.clock( )
+    '''
+    ThreadOne = Process( target = plotWaveSpeedGraph( Graph ) )
+    ThreadTwo = Process( target = plotWaveSpeedGraphWithLimits( Graph ) )
+    ThreadThree = Process( target = plotModesInBand( Graph ) )
+    ThreadFour = Process( target = plotModalDensity( Graph ) )
+    ThreadFive = Process( target = plotModalOverlapFactor( Graph ) )
+    ThreadSix = Process( target = plotMaximumElementSize( Graph ) )
+    ThreadSeven = Process( target = plotEigenfrequenciesPlate( Graph ) )
+
+
+    ThreadOne.start()
+    ThreadTwo.start()
+    ThreadThree.start()
+    ThreadFour.start()
+    ThreadFive.start()
+    ThreadSix.start()
+    ThreadSeven.start()
+
+
+    ThreadOne.join()
+    ThreadTwo.join()
+    ThreadThree.join()
+    ThreadFour.join()
+    ThreadFive.join()
+    ThreadSix.join()
+    ThreadSeven.join()
+    '''
+    #'''
+    plotWaveSpeedGraph( Graph )
+    plotWaveSpeedGraphWithLimits( Graph )
+    plotModesInBand( Graph )
+    plotModalDensity( Graph )
+    plotModalOverlapFactor( Graph )
+    plotMaximumElementSize( Graph )
+    plotEigenfrequenciesPlate( Graph )
+    #'''
+
+    toc = time.clock( ) - tic
+    print "Elapsed time of saving is: ", toc
 
 
 def updateGraph( Graph, GraphNumber ):
@@ -277,19 +381,28 @@ def updateGraph( Graph, GraphNumber ):
     Graph.setPlottingGraphNumber( GraphNumber )
 
 
-    # Remove existing lines from the plot bokeh widget
-    Graph.removeLines()
-
 
     # Depict coresponding lines based on the graph chosen by the user
     if (GraphNumber == 0):
-        Graph.setLogAxis( )
-        plotWaveSpeedGraph( Graph )
+        Graph.loadImage( "WaveSpeed" )
 
     if (GraphNumber == 1):
-        Graph.setLinearAxis( )
-        plotWaveSpeedGraph( Graph )
-        pass
+        Graph.loadImage( "WaveSpeedWithLimits" )
+
+    if (GraphNumber == 2):
+        Graph.loadImage( "ModesInBand" )
+
+    if (GraphNumber == 3):
+        Graph.loadImage( "ModalDensity" )
+
+    if (GraphNumber == 4):
+        Graph.loadImage( "ModalOverlapFactor" )
+
+    if (GraphNumber == 5):
+        Graph.loadImage( "MaximumElementSize" )
+
+    if (GraphNumber == 6):
+        Graph.loadImage( "Eigenfrequencies" )
 
 
 def updateMode( ElasticModulus,
@@ -297,10 +410,12 @@ def updateMode( ElasticModulus,
                 PoissonRatios,
                 MaterialProperties,
                 GeometryProperties,
+                WarningMessage,
                 Graph,
                 Properties ):
 
 
+    WarningMessage.clean( )
     Graph.setMode( Properties )
 
     cangeMode( ElasticModulus,
@@ -308,6 +423,7 @@ def updateMode( ElasticModulus,
                PoissonRatios,
                MaterialProperties,
                GeometryProperties,
+               WarningMessage,
                Graph.getMode() )
 
 
@@ -316,6 +432,7 @@ def cangeMode( ElasticModulus,
                PoissonRatios,
                MaterialProperties,
                GeometryProperties,
+               WarningMessage,
                Mode ):
 
 
@@ -326,8 +443,7 @@ def cangeMode( ElasticModulus,
         ElasticModulus.setValue( 0, 2, UniformValue )
 
         UniformValue = str( ElasticModulus.getFloatValue( 0, 0 ) \
-                            / (
-                            2.0 * (1.0 + PoissonRatios.getFloatValue( 0, 0 ))) )
+                            / ( 2.0 * (1.0 + PoissonRatios.getFloatValue( 0, 0 ))) )
         ShearModulus.setValue( 0, 0, UniformValue )
         ShearModulus.setValue( 0, 1, UniformValue )
         ShearModulus.setValue( 0, 2, UniformValue )
@@ -335,6 +451,12 @@ def cangeMode( ElasticModulus,
         UniformValue = PoissonRatios.getValue( 0, 0 )
         PoissonRatios.setValue( 0, 1, UniformValue )
         PoissonRatios.setValue( 0, 2, UniformValue )
+
+        try:
+            testInputData( Mode, PoissonRatios.getData() )
+        except DataCorrupted as Error:
+            WarningMessage.printMessage( str( Error ) )
+
 
 
     if ( Mode == 0 ):
@@ -380,20 +502,31 @@ def setDeafultSettings( ElasticModulus,
                         PoissonRatios,
                         MaterialProperties,
                         GeometryProperties,
-                        Graph ):
+                        Graph,
+                        WarningMessage ):
 
+    WarningMessage.clean()
 
     ElasticModulus.resetByDefault( )
     ShearModulus.resetByDefault( )
     PoissonRatios.resetByDefault( )
 
+    updateData( ElasticModulus,
+                ShearModulus,
+                PoissonRatios,
+                MaterialProperties,
+                GeometryProperties,
+                Graph,
+                WarningMessage )
 
-    cangeMode( ElasticModulus,
-               ShearModulus,
-               PoissonRatios,
-               MaterialProperties,
-               GeometryProperties,
-               Graph.getMode() )
+
+    # DEBUGGING
+    #cangeMode( ElasticModulus,
+    #           ShearModulus,
+    #           PoissonRatios,
+    #           MaterialProperties,
+    #           GeometryProperties,
+    #           Graph.getMode() )
 
 
 main( )
