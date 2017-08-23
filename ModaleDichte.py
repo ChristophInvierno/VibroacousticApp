@@ -7,8 +7,6 @@ def ModaleDichte(c_L, c_S, c_B_eff, c_g_eff, Geometry, Isotrop, freq ):
 
     Subs = 1
 
-
-
     # allocate numpy arrays
     
     n_f = np.zeros(freq.size)

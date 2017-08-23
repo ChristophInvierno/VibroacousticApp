@@ -7,6 +7,9 @@ from bokeh.io import reset_output
 from bokeh.models import ColumnDataSource
 from GraphClass import GraphObject
 
+
+# grid layout
+
 def plotWaveSpeedGraph( GraphInstance ):
     #print GraphInstance.Functions[ 0 ][ 0 ]
 
@@ -390,7 +393,7 @@ def plotMaximumElementSize( GraphInstance ):
     plt.loglog( GraphInstance.getRange( ), GraphInstance.Functions[ 5 ][ 2 ],
                 basex = 10, linestyle = '-', linewidth = 2, color = GRAY )
 
-    plt.ylabel( 'Maximum Element Size, [???]' )
+    plt.ylabel( 'Maximum Element Size, [ m ]' )
     plt.xlabel( 'Frequency in Hz' )
 
     plt.legend( ('Bending Wave Length',

@@ -188,8 +188,10 @@ def ModalOverlapFactor( MaterialPropertiesData,
 
 def MaximumElementSize( C_B_Array, C_B_eff_Array, Frequency ):
 
-    LamdaH = [ C_B * f for C_B, f in zip( C_B_Array, Frequency ) ]
-    LamdaH_Effective = [ C_B_eff * f for C_B_eff, f in zip( C_B_eff_Array, Frequency ) ]
+    LamdaH = [ C_B / f for C_B, f in zip( C_B_Array, Frequency ) ]
+    LamdaH_Effective = [ C_B_eff / f for C_B_eff, f in zip( C_B_eff_Array, Frequency ) ]
     ElementSize = [ 0.25 * Entry for Entry in LamdaH_Effective ]
 
     return [ LamdaH, LamdaH_Effective, ElementSize ]
+
+
