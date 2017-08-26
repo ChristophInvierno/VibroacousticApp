@@ -1,14 +1,24 @@
 from bokeh.models import Div
 
+
 class Message:
 
-    def __init__(self, MessageHeader = 'Message: '):
-        self.Header = MessageHeader;
+    def __init__(self, Color = "red",
+                 Size = 4,
+                 MessageHeader = 'Message: ',
+                 Width = 500,
+                 Hight = 20 ):
+
+
+        self.Header = MessageHeader
+        self.Color = Color
+        self.Size = Size
+
 
         self.Widget = Div( text = "",
                            render_as_text = False,
-                           width = 500,
-                           height = 20 )
+                           width = Width,
+                           height = Hight )
 
     def clean(self):
         self.Text = ''
@@ -22,6 +32,6 @@ class Message:
 
     def _updateObject(self):
         self.Widget.text = """
-        <p><b><font size="4"> <font color="red">
+        <p><b><font size="{}" color="{}">
         {}
-        </font></font></b></p>""".format( self.Text )
+        </font></b></p>""".format( self.Size, self.Color,self.Text )

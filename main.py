@@ -36,7 +36,7 @@ from InteractiveTable import InteractiveTable
 
 def main( ):
     # Quasi constant
-    FrequencyRange = np.linspace( 0, 100001, num = 1000 ) + 1
+    FrequencyRange = np.logspace( 0, 5, 1000 )
     # the main function only describes both graphical and comunication
     # of the app.
     doc = curdoc()
@@ -50,16 +50,17 @@ def main( ):
                     height = 500 )
 
 
+
     Graph = GraphObject( [ "Wave speed",
                            "Wave Velocities plus Limit Frequencies",
                            "Modes in Band",
                            "Modal Density",
                            "Modal Overlap Factor",
-                           "Maximum Element Size (FEM)",
-                           "Natural Frequencies" ],
-                            FrequencyRange)
-
-    #Graph.setLogAxis( )
+                           "Maximum Element Size (FEM)"],
+                            FrequencyRange,
+                            nFunctions = 7,
+                            Width = 850,
+                            Height = 550)
 
 
     # CREATE TABLES:
@@ -127,11 +128,13 @@ def main( ):
                                          width = 500,
                                          active = 0 )
 
-    WarningMessage = Message( "Warning: " );
+    WarningMessage = Message( Color = "red",
+                              Size = 2 ,
+                              MessageHeader = "Warning: " );
 
 
     # SPECIFY THE LAYOUT:
-    Buttons = row( row( Spacer( width = 175 ),
+    Buttons = row( row( Spacer( width = 85 ),
                         SetDefaultButton,
                         Spacer( width = 50 ),
                         ApplyButton,
@@ -314,64 +317,14 @@ def updateData( ElasticModulus,
                                                       bool( Graph.getMode() ),
                                                       Graph.getRange() )
 
-        Graph.removeAll()
-        Graph.inceremetImageCounter()
-        prepareGraph( Graph )
-
         # Update the current graph with new data
-        updateGraph( Graph,
-                     Graph.getCurrentGraphNumber( ) )
+        updateGraph( Graph, Graph.getCurrentGraphNumber( ) )
 
         WarningMessage.clean()
 
 
     except DataCorrupted as Error:
         WarningMessage.printMessage( str(Error) )
-
-
-def prepareGraph( Graph ):
-
-    tic = time.clock( )
-    '''
-    ThreadOne = Process( target = plotWaveSpeedGraph( Graph ) )
-    ThreadTwo = Process( target = plotWaveSpeedGraphWithLimits( Graph ) )
-    ThreadThree = Process( target = plotModesInBand( Graph ) )
-    ThreadFour = Process( target = plotModalDensity( Graph ) )
-    ThreadFive = Process( target = plotModalOverlapFactor( Graph ) )
-    ThreadSix = Process( target = plotMaximumElementSize( Graph ) )
-    ThreadSeven = Process( target = plotEigenfrequenciesPlate( Graph ) )
-
-
-    ThreadOne.start()
-    ThreadTwo.start()
-    ThreadThree.start()
-    ThreadFour.start()
-    ThreadFive.start()
-    ThreadSix.start()
-    ThreadSeven.start()
-
-
-    ThreadOne.join()
-    ThreadTwo.join()
-    ThreadThree.join()
-    ThreadFour.join()
-    ThreadFive.join()
-    ThreadSix.join()
-    ThreadSeven.join()
-    '''
-    #'''
-    plotWaveSpeedGraph( Graph )
-    plotWaveSpeedGraphWithLimits( Graph )
-    plotModesInBand( Graph )
-    plotModalDensity( Graph )
-    plotModalOverlapFactor( Graph )
-    plotMaximumElementSize( Graph )
-    plotEigenfrequenciesPlate( Graph )
-    #'''
-
-    toc = time.clock( ) - tic
-    print "Elapsed time of saving is: ", toc
-
 
 def updateGraph( Graph, GraphNumber ):
 
@@ -380,29 +333,27 @@ def updateGraph( Graph, GraphNumber ):
     # belongs to the RadioButton widget )
     Graph.setPlottingGraphNumber( GraphNumber )
 
+    plotEigenfrequenciesPlate( Graph )
 
 
     # Depict coresponding lines based on the graph chosen by the user
     if (GraphNumber == 0):
-        Graph.loadImage( "WaveSpeed" )
+        plotWaveSpeedGraph( Graph )
 
     if (GraphNumber == 1):
-        Graph.loadImage( "WaveSpeedWithLimits" )
+        plotWaveSpeedGraphWithLimits( Graph )
 
     if (GraphNumber == 2):
-        Graph.loadImage( "ModesInBand" )
+        plotModesInBand( Graph )
 
     if (GraphNumber == 3):
-        Graph.loadImage( "ModalDensity" )
+        plotModalDensity( Graph )
 
     if (GraphNumber == 4):
-        Graph.loadImage( "ModalOverlapFactor" )
+        plotModalOverlapFactor( Graph )
 
     if (GraphNumber == 5):
-        Graph.loadImage( "MaximumElementSize" )
-
-    if (GraphNumber == 6):
-        Graph.loadImage( "Eigenfrequencies" )
+        plotMaximumElementSize( Graph )
 
 
 def updateMode( ElasticModulus,
@@ -483,18 +434,18 @@ def precomputePoissonRatios( ElasticModulus,
     Temp = PoissonRatios.getFloatValue( 0, 0 ) * ElasticModulus.getFloatValue ( 0, 1 ) \
            / ElasticModulus.getFloatValue( 0, 0 )
 
-    PoissonRatios.assignValue( 1, 0, str( Temp ) )
+    PoissonRatios.assignValue( 1, 0, str( round(Temp,5) ) )
 
     # update value of nu_31
     Temp = PoissonRatios.getFloatValue( 0, 1 ) * ElasticModulus.getFloatValue( 0, 2 ) \
            / ElasticModulus.getFloatValue( 0, 0 )
-    PoissonRatios.assignValue( 1, 1, str( Temp ) )
+    PoissonRatios.assignValue( 1, 1, str( round(Temp,5) ) )
 
     # update value of nu_32
     Temp = PoissonRatios.getFloatValue( 0, 2 ) * ElasticModulus.getFloatValue( 0, 2 ) \
            / ElasticModulus.getFloatValue( 0, 1 )
 
-    PoissonRatios.assignValue( 1, 2, str( Temp ) )
+    PoissonRatios.assignValue( 1, 2, str( round(Temp,5) ) )
 
 
 def setDeafultSettings( ElasticModulus,
