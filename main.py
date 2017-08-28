@@ -56,7 +56,8 @@ def main( ):
                            "Modes in Band",
                            "Modal Density",
                            "Modal Overlap Factor",
-                           "Maximum Element Size (FEM)"],
+                           "Maximum Element Size (FEM)",
+                           "Layers Scheme"],
                             FrequencyRange,
                             nFunctions = 7,
                             Width = 850,
@@ -107,6 +108,20 @@ def main( ):
     GeometryProperties.setValues( [ [ "2.5", "3.0", "0.081" ] ] )
 
 
+    # ........................ Layers table .......................
+    LAYER_TITEL = Div( text = """MULTI-LAYERS:""" )
+    Layers = InteractiveTable( 4, 1 )
+    Layers.setTitels( [ [ "Top Layer 1" ],
+                        [ "Top Layer 2" ],
+                        [ "Top Layer 3" ],
+                        [ "Top Layer 4" ] ] )
+    Layers.setValues( [ [ "0.081" ],
+                        [ "0.0" ],
+                        [ "0.0" ],
+                        [ "0.0" ]] )
+
+
+
     # CREATE BUTTONS:
     SetDefaultButton = Button( label = "Default",
                                button_type = "success",
@@ -122,11 +137,21 @@ def main( ):
                           button_type = "success",
                           width = 100 )
 
+    Homogenize = Button( label = "Homogenize",
+                          button_type = "success",
+                          width = 100 )
+
+    ShowInput = Button( label = "Show Input",
+                        button_type = "success",
+                        width = 100 )
+
+
 
     ModeRadioButtons = RadioButtonGroup( labels = [ "Orthotropic Material",
                                                     "Isotropic Material" ],
                                          width = 500,
                                          active = 0 )
+
 
     WarningMessage = Message( Color = "red",
                               Size = 2 ,
@@ -154,9 +179,12 @@ def main( ):
                         MaterialProperties.Table,
                         GEOMETRY_TITEL,
                         GeometryProperties.Table,
-                        WarningMessage.Widget )
+                        LAYER_TITEL,
+                        row( Layers.Table,
+                             Spacer(width = 85),
+                             column(Homogenize,ShowInput)))
 
-    RightSide = column( Graph.Widget , Buttons )
+    RightSide = column( Graph.Widget , Buttons, WarningMessage.Widget )
 
 
     # ========================= COMMUNICATION PART =============================
@@ -268,7 +296,7 @@ def updateData( ElasticModulus,
 
         print Graph.getMode()
 
-        WarningMessage.printMessage("Running")
+        #WarningMessage.printMessage("Running")
 
         testInputData( Graph.getMode(), PoissonRatiosData )
 
