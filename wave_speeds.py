@@ -288,22 +288,22 @@ def wave_speeds( ElasticModulusData,
 
 
     # Prepare data that have to be returned from the function
-    Result = [ c_B.tolist( )[ 0 ], #
-               c_B_eff.tolist( )[ 0 ], #
-               c_B_shear.tolist( )[ 0 ][ 0 ],
-               c_g.tolist( )[ 0 ], #
-               c_g_eff.tolist( )[ 0 ], #
-               c_S.tolist( )[ 0 ][ 0 ],
-               c_S_outofplane.tolist( )[ 0 ],
-               c_S_outofplane_1.tolist( )[ 0 ][ 0 ],
-               c_S_outofplane_2.tolist( )[ 0 ][ 0 ],
-               c_L.tolist( )[ 0 ],
-               c_L_thick.tolist( )[ 0 ][ 0 ],
-               f_thickmode_shear.tolist( )[ 0 ],
-               f_thickmode_shear_x.tolist( )[ 0 ],
-               f_thickmode_shear_y.tolist( )[ 0 ],
-               fR_B.tolist( )[ 0 ],
-               fR_g.tolist( )[ 0 ] ]
+    Result = { "c_B" : c_B.tolist( )[ 0 ], #
+               "c_B_eff" : c_B_eff.tolist( )[ 0 ], #
+               "c_B_shear" : c_B_shear.tolist( )[ 0 ][ 0 ],
+               "c_g" : c_g.tolist( )[ 0 ], #
+               "c_g_eff" : c_g_eff.tolist( )[ 0 ], #
+               "c_S" : c_S.tolist( )[ 0 ][ 0 ],
+               "c_S_outofplane" : c_S_outofplane.tolist( )[ 0 ],
+               "c_S_outofplane_1" : c_S_outofplane_1.tolist( )[ 0 ][ 0 ],
+               "c_S_outofplane_2" : c_S_outofplane_2.tolist( )[ 0 ][ 0 ],
+               "c_L" : c_L.tolist( )[ 0 ],
+               "c_L_thick" : c_L_thick.tolist( )[ 0 ][ 0 ],
+               "f_thickmode_shear" : f_thickmode_shear.tolist( )[ 0 ],
+               "f_thickmode_shear_x" : f_thickmode_shear_x.tolist( )[ 0 ],
+               "f_thickmode_shear_y" : f_thickmode_shear_y.tolist( )[ 0 ],
+               "fR_B" : fR_B.tolist( )[ 0 ],
+               "fR_g" : fR_g.tolist( )[ 0 ] }
 
 
     return Result

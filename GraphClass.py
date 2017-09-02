@@ -27,7 +27,7 @@ class GraphObject:
     IMAGE_COUNTER = 0;
     _MAX_NUMBER_OF_LINES = 15
 
-    def __init__( self, GraphNames, aRange, nFunctions, Width = 650, Height = 550 ):
+    def __init__( self, GraphNames, aRange, Width = 650, Height = 550 ):
 
         self.Width = Width
         self.Height = Height
@@ -36,9 +36,6 @@ class GraphObject:
             raise GraphCorrupted( "ERROR: the list of graph names is empty" )
         else:
             self.__GraphNames = GraphNames
-            self.__NumberOfFunctions = nFunctions
-            self.Functions = range( 0, self.__NumberOfFunctions )
-
 
 
         if len( aRange ) == 0:
@@ -122,11 +119,7 @@ class GraphObject:
 
 
     def setPlottingGraphNumber( self, Number ):
-
-        if ( Number < 0 ) or ( Number > self.__NumberOfFunctions ):
-            raise GraphCorrupted( "ERROR: the graph number is out of the range" )
-        else:
-            self.__PlottingGraphNumber = Number
+        self.__PlottingGraphNumber = Number
 
 
 
@@ -164,3 +157,16 @@ class GraphObject:
         self.Graph.legend[ 0 ].items[ ID ].label[ 'value' ] = Name
 
         pass
+
+    def defineContainers(self, Keys = None):
+        '''
+
+        :param Keys: a list of keys for the Containers. Containers have their
+         data structure as a dictionary
+         Throw an error if the user doesn't specify the keys
+        :return:
+        '''
+        if Keys == None:
+            raise( Exception )
+
+        self.Containers = { Key : [] for Key in Keys }

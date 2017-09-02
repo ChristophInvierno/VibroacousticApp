@@ -11,21 +11,21 @@ from GraphClass import GraphObject
 def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.cleanGraph()
-    GraphInstance.Graph.yaxis.axis_label = "Wave velocity in m/s"
+    GraphInstance.Graph.yaxis.axis_label = "Wave Velocity in m/s"
     GraphInstance.Graph.xaxis.axis_label = "Frequency in Hz"
 
     # Find the maximum values in both x and y direction to be able to
     # depict both vertical and horizontal lines
-    MaxCoordinateY = max( GraphInstance.Functions[ 0 ][ 3 ] )
+    MaxCoordinateY = max( GraphInstance.Containers[ "WaveVelocity" ][ "c_g" ] )
     MaxCoordinateX = max( GraphInstance.getRange( ) )
-    MinCoordinateY = min( GraphInstance.Functions[ 0 ][ 1 ] )
+    MinCoordinateY = min( GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
     MinCoordinateX = min( GraphInstance.getRange( ) )
 
     # ............................ c_L graph ...................................
     # 'Quasi-longitudial, in-plane'
     RangeX = [ MinCoordinateX, MaxCoordinateX ]
-    RangeY = [ GraphInstance.Functions[ 0 ][ 9 ][ 0 ],
-               GraphInstance.Functions[ 0 ][ 9 ][ 0 ] ]
+    RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_L" ][ 0 ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "c_L" ][ 0 ] ]
 
 
     GraphInstance.GraphData[ 0 ].data = dict( XData = RangeX,
@@ -38,8 +38,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # .................... c_L_thick graph .............................
     # 'Longitudinal out-of-plane'
     RangeX = [ MinCoordinateX, MaxCoordinateX ]
-    RangeY = [ GraphInstance.Functions[ 0 ][ 10 ],
-               GraphInstance.Functions[ 0 ][ 10 ] ]
+    RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_L_thick" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "c_L_thick" ] ]
 
     GraphInstance.GraphData[ 1 ].data = dict( XData = RangeX,
                                                YData = RangeY )
@@ -52,8 +52,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # ............................ c_S graph ...................................
     # 'Shear, in-plane'
     RangeX = [ MinCoordinateX, MaxCoordinateX ]
-    RangeY = [ GraphInstance.Functions[ 0 ][ 5 ],
-               GraphInstance.Functions[ 0 ][ 5 ] ]
+    RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_S" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "c_S" ] ]
 
     GraphInstance.GraphData[ 2 ].data = dict( XData = RangeX,
                                               YData = RangeY )
@@ -66,8 +66,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # ................... c_S_outofplane_1 graph ............................
     # 'Shear out-of-plane prop. (G32)'
     RangeX = [ MinCoordinateX, MaxCoordinateX ]
-    RangeY = [ GraphInstance.Functions[ 0 ][ 7 ],
-               GraphInstance.Functions[ 0 ][ 7 ] ]
+    RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_1" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_1" ] ]
 
     GraphInstance.GraphData[ 3 ].data = dict( XData = RangeX,
                                                YData = RangeY )
@@ -80,8 +80,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # ................... c_S_outofplane_2 graph ............................
     # 'Shear out-of-plane prop. (G31)'
     RangeX = [ MinCoordinateX, MaxCoordinateX ]
-    RangeY = [ GraphInstance.Functions[ 0 ][ 8 ],
-               GraphInstance.Functions[ 0 ][ 8 ] ]
+    RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_2" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_2" ] ]
 
     GraphInstance.GraphData[ 4 ].data = dict( XData = RangeX,
                                                YData = RangeY )
@@ -94,8 +94,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # ......................... c_B_shear graph ................................
     # 'Shear (corrected), out-of-plane displ.'
     RangeX = [ MinCoordinateX, MaxCoordinateX ]
-    RangeY = [ GraphInstance.Functions[ 0 ][ 2 ],
-               GraphInstance.Functions[ 0 ][ 2 ] ]
+    RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_B_shear" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "c_B_shear" ] ]
 
     GraphInstance.GraphData[ 5 ].data = dict( XData = RangeX,
                                               YData = RangeY )
@@ -108,7 +108,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # .......................... c_B_eff graph .................................
     # 'Pure bending (thin plate)'
     GraphInstance.GraphData[ 6 ].data = dict( XData = GraphInstance.getRange(),
-                                              YData = GraphInstance.Functions[ 0 ][ 1 ] )
+                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
 
     GraphInstance.defineLine( 6, 'Pure bending (thin plate)',
                               GREEN,
@@ -118,7 +118,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # ............................ c_B graph ...................................
     # 'Effective bending (thick plate)'
     GraphInstance.GraphData[ 7 ].data = dict( XData = GraphInstance.getRange(),
-                                              YData = GraphInstance.Functions[ 0 ][ 0 ] )
+                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B" ] )
 
     GraphInstance.defineLine( 7, 'Effective bending (thick plate)',
                               GREEN,
@@ -129,7 +129,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # ............................ c_g graph ...................................
     # 'Group (bending)'
     GraphInstance.GraphData[ 8 ].data = dict( XData = GraphInstance.getRange(),
-                                              YData = GraphInstance.Functions[ 0 ][ 3 ] )
+                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_g" ] )
 
     GraphInstance.defineLine( 8, 'Group (bending)',
                               ORANGE,
@@ -139,7 +139,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # .......................... c_g_eff graph .................................
     # 'Group (effective bending)'
     GraphInstance.GraphData[ 9 ].data = dict( XData = GraphInstance.getRange(),
-                                              YData = GraphInstance.Functions[ 0 ][ 4 ] )
+                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_g_eff" ] )
 
     GraphInstance.defineLine( 9, 'Group (effective bending)',
                               ORANGE,
@@ -148,8 +148,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     # .................... fR_B graph .............................
     # 'Thin-Plate-Limit Group'
-    RangeX = [ GraphInstance.Functions[ 0 ][ 15 ],
-               GraphInstance.Functions[ 0 ][ 15 ] ]
+    RangeX = [ GraphInstance.Containers[ "WaveVelocity" ][ "fR_g" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "fR_g" ] ]
     RangeY = [ MinCoordinateY, MaxCoordinateY ]
 
     GraphInstance.GraphData[ 10 ].data = dict( XData = RangeX,
@@ -162,8 +162,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     # .................... fR_B graph .............................
     # 'Thin-Plate-Limit Phase'
-    RangeX = [ GraphInstance.Functions[ 0 ][ 14 ],
-               GraphInstance.Functions[ 0 ][ 14 ] ]
+    RangeX = [ GraphInstance.Containers[ "WaveVelocity" ][ "fR_B" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "fR_B" ] ]
     RangeY = [ MinCoordinateY, MaxCoordinateY ]
 
     GraphInstance.GraphData[ 11 ].data = dict( XData = RangeX,
@@ -176,8 +176,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     # ................... f_thickmode_shear_y graph ............................
     # '1st Thickness-shear resonance (G32)'
-    RangeX = [ GraphInstance.Functions[ 0 ][ 13 ],
-               GraphInstance.Functions[ 0 ][ 13 ] ]
+    RangeX = [ GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear_y" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear_y" ] ]
     RangeY = [ MinCoordinateY, MaxCoordinateY ]
 
     GraphInstance.GraphData[ 12 ].data = dict( XData = RangeX,
@@ -191,8 +191,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     # .................... f_thickmode_shear graph .............................
     # '1st Thickness-shear resonance (G31)'
-    RangeX = [ GraphInstance.Functions[ 0 ][ 11 ],
-               GraphInstance.Functions[ 0 ][ 11 ] ]
+    RangeX = [ GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear" ] ]
     RangeY = [ MinCoordinateY, MaxCoordinateY ]
 
     GraphInstance.GraphData[ 13 ].data = dict( XData = RangeX,
@@ -205,8 +205,8 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     # ................... f_thickmode_shear_x graph ............................
     # '1st Thickness-stretch resonance'
-    RangeX = [ GraphInstance.Functions[ 0 ][ 12 ],
-               GraphInstance.Functions[ 0 ][ 12 ] ]
+    RangeX = [ GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear_x" ],
+               GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear_x" ] ]
     RangeY = [ MinCoordinateY, MaxCoordinateY ]
 
     GraphInstance.GraphData[ 14 ].data = dict( XData = RangeX,
@@ -221,21 +221,21 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 def plotWaveSpeedGraph( GraphInstance ):
 
         GraphInstance.cleanGraph()
-        GraphInstance.Graph.yaxis.axis_label = "Wave velocity in m/s"
+        GraphInstance.Graph.yaxis.axis_label = "Wave Velocity in m/s"
         GraphInstance.Graph.xaxis.axis_label = "Frequency in Hz"
 
         # Find the maximum values in both x and y direction to be able to
         # depict both vertical and horizontal lines
-        MaxCoordinateY = max( GraphInstance.Functions[ 0 ][ 3 ] )
+        MaxCoordinateY = max( GraphInstance.Containers[ "WaveVelocity" ][ "c_g" ] )
         MaxCoordinateX = max( GraphInstance.getRange( ) )
-        MinCoordinateY = min( GraphInstance.Functions[ 0 ][ 1 ] )
+        MinCoordinateY = min( GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
         MinCoordinateX = min( GraphInstance.getRange( ) )
 
         # ............................ c_L graph ...................................
         # 'Quasi-longitudial, in-plane'
         RangeX = [  MinCoordinateX, MaxCoordinateX ]
-        RangeY = [ GraphInstance.Functions[ 0 ][ 9 ][ 0 ],
-                   GraphInstance.Functions[ 0 ][ 9 ][ 0 ] ]
+        RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_L" ][ 0 ],
+                   GraphInstance.Containers[ "WaveVelocity" ][ "c_L" ][ 0 ] ]
 
 
         GraphInstance.GraphData[ 0 ].data = dict( XData = RangeX,
@@ -249,8 +249,8 @@ def plotWaveSpeedGraph( GraphInstance ):
         # .................... c_L_thick graph .............................
         # 'Longitudinal out-of-plane'
         RangeX = [ MinCoordinateX, MaxCoordinateX ]
-        RangeY = [ GraphInstance.Functions[ 0 ][ 10 ],
-                   GraphInstance.Functions[ 0 ][ 10 ] ]
+        RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_L_thick" ],
+                   GraphInstance.Containers[ "WaveVelocity" ][ "c_L_thick" ] ]
 
         GraphInstance.GraphData[ 1 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
@@ -263,8 +263,8 @@ def plotWaveSpeedGraph( GraphInstance ):
         # ............................ c_S graph ...................................
         # 'Shear, in-plane'
         RangeX = [ MinCoordinateX, MaxCoordinateX ]
-        RangeY = [ GraphInstance.Functions[ 0 ][ 5 ],
-                   GraphInstance.Functions[ 0 ][ 5 ] ]
+        RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_S" ],
+                   GraphInstance.Containers[ "WaveVelocity" ][ "c_S" ] ]
 
         GraphInstance.GraphData[ 2 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
@@ -277,8 +277,8 @@ def plotWaveSpeedGraph( GraphInstance ):
         # ................... c_S_outofplane_1 graph ............................
         # 'Shear out-of-plane prop. (G32)'
         RangeX = [ MinCoordinateX, MaxCoordinateX ]
-        RangeY = [ GraphInstance.Functions[ 0 ][ 7 ],
-                   GraphInstance.Functions[ 0 ][ 7 ] ]
+        RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_1" ],
+                   GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_1" ] ]
 
         GraphInstance.GraphData[ 3 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
@@ -291,8 +291,8 @@ def plotWaveSpeedGraph( GraphInstance ):
         # ................... c_S_outofplane_2 graph ............................
         # 'Shear out-of-plane prop. (G31)'
         RangeX = [ MinCoordinateX, MaxCoordinateX ]
-        RangeY = [ GraphInstance.Functions[ 0 ][ 8 ],
-                   GraphInstance.Functions[ 0 ][ 8 ] ]
+        RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_2" ],
+                   GraphInstance.Containers[ "WaveVelocity" ][ "c_S_outofplane_2" ] ]
 
         GraphInstance.GraphData[ 4 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
@@ -305,8 +305,8 @@ def plotWaveSpeedGraph( GraphInstance ):
         # ......................... c_B_shear graph ................................
         # 'Shear (corrected), out-of-plane displ.'
         RangeX = [ MinCoordinateX, MaxCoordinateX ]
-        RangeY = [ GraphInstance.Functions[ 0 ][ 2 ],
-                   GraphInstance.Functions[ 0 ][ 2 ] ]
+        RangeY = [ GraphInstance.Containers[ "WaveVelocity" ][ "c_B_shear" ],
+                   GraphInstance.Containers[ "WaveVelocity" ][ "c_B_shear" ] ]
 
         GraphInstance.GraphData[ 5 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
@@ -319,7 +319,7 @@ def plotWaveSpeedGraph( GraphInstance ):
         # .......................... c_B_eff graph .................................
         # 'Pure bending (thin plate)'
         GraphInstance.GraphData[ 6 ].data = dict( XData = GraphInstance.getRange(),
-                                                  YData = GraphInstance.Functions[ 0 ][ 1 ] )
+                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
 
         GraphInstance.defineLine( 6, 'Pure bending (thin plate)',
                                   GREEN,
@@ -329,7 +329,7 @@ def plotWaveSpeedGraph( GraphInstance ):
         # ............................ c_B graph ...................................
         # 'Effective bending (thick plate)'
         GraphInstance.GraphData[ 7 ].data = dict( XData = GraphInstance.getRange(),
-                                                  YData = GraphInstance.Functions[ 0 ][ 0 ] )
+                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B" ] )
 
         GraphInstance.defineLine( 7, 'Effective bending (thick plate)',
                                   GREEN,
@@ -339,7 +339,7 @@ def plotWaveSpeedGraph( GraphInstance ):
         # ............................ c_g graph ...................................
         # 'Group (bending)'
         GraphInstance.GraphData[ 8 ].data = dict( XData = GraphInstance.getRange(),
-                                                  YData = GraphInstance.Functions[ 0 ][ 3 ] )
+                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_g" ] )
 
         GraphInstance.defineLine( 8, 'Group (bending)',
                                   ORANGE,
@@ -349,7 +349,7 @@ def plotWaveSpeedGraph( GraphInstance ):
         # .......................... c_g_eff graph .................................
         # 'Group (effective bending)'
         GraphInstance.GraphData[ 9 ].data = dict( XData = GraphInstance.getRange(),
-                                                  YData = GraphInstance.Functions[ 0 ][ 4 ] )
+                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_g_eff" ] )
 
         GraphInstance.defineLine( 9, 'Group (effective bending)',
                                   ORANGE,
@@ -359,13 +359,13 @@ def plotWaveSpeedGraph( GraphInstance ):
 def plotModesInBand( GraphInstance ):
 
     GraphInstance.cleanGraph( )
-    GraphInstance.Graph.yaxis.axis_label = "Number of modes per one-third octave band"
+    GraphInstance.Graph.yaxis.axis_label = "Number of Modes per one-third octave band"
     GraphInstance.Graph.xaxis.axis_label = "Frequency in Hz"
 
     # ............................ bending_np graph ............................
     # 'Effective bending (thick plate)'
-    GraphInstance.GraphData[ 0 ].data = dict( XData = GraphInstance.Functions[ 2 ][ 4 ],
-                                              YData = GraphInstance.Functions[ 2 ][ 0 ] )
+    GraphInstance.GraphData[ 0 ].data = dict( XData = GraphInstance.Containers[ "ModesInBand" ][ "freq_T" ],
+                                              YData = GraphInstance.Containers[ "ModesInBand" ][ "bending" ] )
 
     GraphInstance.defineLine( 0, 'Effective bending (thick plate)',
                               GREEN,
@@ -374,8 +374,8 @@ def plotModesInBand( GraphInstance ):
 
     # ............................ compressional_np graph ......................
     # 'Shear, in-plane'
-    GraphInstance.GraphData[ 1 ].data = dict( XData = GraphInstance.Functions[ 2 ][ 4 ],
-                                              YData = GraphInstance.Functions[ 2 ][ 2 ] )
+    GraphInstance.GraphData[ 1 ].data = dict( XData = GraphInstance.Containers[ "ModesInBand" ][ "freq_T" ],
+                                              YData = GraphInstance.Containers[ "ModesInBand" ][ "shear" ] )
 
     GraphInstance.defineLine( 1, 'Shear, in-plane',
                               LIGHT_BLUE,
@@ -384,8 +384,8 @@ def plotModesInBand( GraphInstance ):
 
     # ............................ shear_np graph ..............................
     # 'Quasi-longitudial, in plane'
-    GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.Functions[ 2 ][ 4 ],
-                                              YData = GraphInstance.Functions[ 2 ][ 1 ] )
+    GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.Containers[ "ModesInBand" ][ "freq_T" ],
+                                              YData = GraphInstance.Containers[ "ModesInBand" ][ "compressional" ] )
 
     GraphInstance.defineLine( 2, 'Quasi-longitudial, in plane',
                               DARK_BLUE,
@@ -400,17 +400,17 @@ def plotModalDensity( GraphInstance ):
 
     # ............................ bending_np graph ............................
     # 'Quasi-longitudinal, in-plane'
-    GraphInstance.GraphData[ 0 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 3 ][ 0 ] )
+    GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.getRange( ),
+                                              YData = GraphInstance.Containers[ "ModalDensity" ][ "compressional" ] )
 
-    GraphInstance.defineLine( 0, 'Quasi-longitudinal, in-plane',
+    GraphInstance.defineLine( 2, 'Quasi-longitudinal, in-plane',
                               DARK_BLUE,
                               'solid' )
 
     # ............................ bending_np graph ............................
     # 'Shear, in-plane'
     GraphInstance.GraphData[ 1 ].data = dict( XData = GraphInstance.getRange( ),
-                                                YData = GraphInstance.Functions[ 3 ][ 2 ] )
+                                                YData = GraphInstance.Containers[ "ModalDensity" ][ "shear" ] )
 
     GraphInstance.defineLine( 1, 'Shear, in-plane',
                               LIGHT_BLUE,
@@ -418,10 +418,10 @@ def plotModalDensity( GraphInstance ):
 
     # ............................ bending_np graph ............................
     # 'Effective bending (thick plate)'
-    GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 3 ][ 1 ] )
+    GraphInstance.GraphData[ 0 ].data = dict( XData = GraphInstance.getRange( ),
+                                              YData = GraphInstance.Containers[ "ModalDensity" ][ "bending" ] )
 
-    GraphInstance.defineLine( 2, 'Effective bending (thick plate)',
+    GraphInstance.defineLine( 0, 'Effective bending (thick plate)',
                               GREEN,
                               'solid' )
 
@@ -434,17 +434,17 @@ def plotModalOverlapFactor( GraphInstance ):
 
     # ...................... Mhp_QuasiLongitudinal graph .......................
     # 'Quasi-longitudinal, in-plane'
-    GraphInstance.GraphData[ 0 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 4 ][ 0 ] )
+    GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.getRange( ),
+                                              YData = GraphInstance.Containers[ "ModalOverlapFactor" ][ "QuasiLongitudinal" ] )
 
-    GraphInstance.defineLine( 0, 'Quasi-longitudinal, in-plane',
+    GraphInstance.defineLine( 2, 'Quasi-longitudinal, in-plane',
                               DARK_BLUE,
                               'solid' )
 
     # ......................... Mhp_Shear graph ................................
     # 'Shear, in-plane'
     GraphInstance.GraphData[ 1 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 4 ][ 1 ] )
+                                              YData = GraphInstance.Containers[ "ModalOverlapFactor" ][ "Shear" ] )
 
     GraphInstance.defineLine( 1, 'Shear, in-plane',
                               LIGHT_BLUE,
@@ -452,10 +452,10 @@ def plotModalOverlapFactor( GraphInstance ):
 
     # ........................ Mhp_Effective graph .............................
     # 'Effective bending (thick plate)'
-    GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 4 ][ 2 ] )
+    GraphInstance.GraphData[ 0 ].data = dict( XData = GraphInstance.getRange( ),
+                                              YData = GraphInstance.Containers[ "ModalOverlapFactor" ][ "Bending" ] )
 
-    GraphInstance.defineLine( 2, 'Effective bending (thick plate)',
+    GraphInstance.defineLine( 0, 'Effective bending (thick plate)',
                               GREEN,
                               'solid' )
 
@@ -463,13 +463,13 @@ def plotModalOverlapFactor( GraphInstance ):
 def plotMaximumElementSize( GraphInstance ):
 
     GraphInstance.cleanGraph( )
-    GraphInstance.Graph.yaxis.axis_label = "Maximum Element Size, [ m ]"
+    GraphInstance.Graph.yaxis.axis_label = "Wave length / Max. Element Size in m"
     GraphInstance.Graph.xaxis.axis_label = "Frequency in Hz"
 
     # ......................        LamdaH graph         .......................
     # 'Bending Wave Length'
     GraphInstance.GraphData[ 0 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 5 ][ 0 ] )
+                                              YData = GraphInstance.Containers[ "MaxElementSize" ][ "Lamda" ] )
 
     GraphInstance.defineLine( 0, 'Bending Wave Length',
                               GREEN,
@@ -478,7 +478,7 @@ def plotMaximumElementSize( GraphInstance ):
     # .....................  LamdaH_Effective graph  ...........................
     # 'Effective Bending Wave Length'
     GraphInstance.GraphData[ 1 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 5 ][ 1 ] )
+                                              YData = GraphInstance.Containers[ "MaxElementSize" ][ "Lamda_Eff" ] )
 
     GraphInstance.defineLine( 1, 'Effective Bending Wave Length',
                               GREEN,
@@ -488,20 +488,20 @@ def plotMaximumElementSize( GraphInstance ):
     # ........................ ElementSize graph ...............................
     # 'Maximum Element Size \n(Quadratic Shape Functions)'
     GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.getRange( ),
-                                              YData = GraphInstance.Functions[ 5 ][ 2 ] )
+                                              YData = GraphInstance.Containers[ "MaxElementSize" ][ "ElementSize" ] )
 
-    GraphInstance.defineLine( 2, 'Maximum Element Size (QSF)',
+    GraphInstance.defineLine( 2, 'Max. Elem. Size: quadr. shape fct.',
                               GRAY,
                               'solid' )
 
 
 def plotEigenfrequenciesPlate( GraphInstance ):
-    Text = "F<sub>11</sub> = {} [Hz], F<sub>12</sub> = {} [Hz], " \
-           "F<sub>21</sub> = {} [Hz], F<sub>22</sub> = {} [Hz]".format(
-        round( GraphInstance.Functions[ 6 ][ 0 ], 2 ),
-        round( GraphInstance.Functions[ 6 ][ 1 ], 2 ),
-        round( GraphInstance.Functions[ 6 ][ 2 ], 2 ),
-        round( GraphInstance.Functions[ 6 ][ 3 ], 2 )
+    Text = "F<sub>11</sub> = {} Hz, F<sub>12</sub> = {} Hz, " \
+           "F<sub>21</sub> = {} Hz, F<sub>22</sub> = {} Hz".format(
+        round( GraphInstance.Containers[ "EigenFrequency" ][ "f11" ], 2 ),
+        round( GraphInstance.Containers[ "EigenFrequency" ][ "f12" ], 2 ),
+        round( GraphInstance.Containers[ "EigenFrequency" ][ "f21" ], 2 ),
+        round( GraphInstance.Containers[ "EigenFrequency" ][ "f22" ], 2 )
     )
 
 

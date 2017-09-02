@@ -42,3 +42,76 @@ def testInputData( Mode, Nu):
                                 "<p> Current mode: ISOTROPIC; Threshold: 0.49 </p>"
                                 "<p> Change: POISSON'S RATIOS VALUE")
         pass
+
+
+class WrongLayersThikness(Exception):
+    pass
+
+
+def getLayersFromString( aString ):
+
+    LayersThickness = parseString( aString )
+    checkLayerConsistency( LayersThickness )
+    Layers = mirrorLayers( LayersThickness )
+
+    return Layers
+
+
+def parseString( aString ):
+    DILIMETERS = [';','|']
+    EMPTY_STRING = ''
+
+    Words = aString.split()
+
+    # Go through all dilimeters and parse whatever it's possible to parse
+    for Dilimeter in DILIMETERS:
+        TempDictionary = []
+
+        for aWord in Words:
+            TempList = aWord.split( Dilimeter )
+
+            for Element in TempList:
+                if Element != EMPTY_STRING:
+                    TempDictionary.append( Element )
+
+        Words = TempDictionary
+
+    # try to cast all words to floats. Catch and process the error if it's possible
+        LayersThickness = []
+    try:
+        for aWord in Words:
+            LayersThickness.append( float(aWord) )
+
+    except:
+        raise WrongLayersThikness( "The data format for the layers thikness is wrong. "
+                                  "Please, refer to the documentation" )
+
+    return LayersThickness
+
+def checkLayerConsistency( Layers ):
+
+    for Layer in Layers:
+        if Layer < 0.0:
+            raise WrongLayersThikness("The thickness of one of the layers "
+                                      "has its negative value")
+        if Layer == 0.0:
+            raise WrongLayersThikness("The thickness of one of the layers "
+                                      "is eqaul to zero" )
+
+    pass
+
+def mirrorLayers( TopLayers ):
+
+    nTopLayers = len( TopLayers )
+    if nTopLayers == 1:
+        # Return the input data if there is only one layer
+        return TopLayers
+
+    nLayers = 2 * ( nTopLayers -1 ) + 1
+    Layers = [ 0.0 ] * nLayers
+
+    for i in range( nTopLayers ):
+       Layers[ i ] = TopLayers[ i ]
+       Layers[ -1 - i ] = TopLayers[ i ]
+
+    return Layers

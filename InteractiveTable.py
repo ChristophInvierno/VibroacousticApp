@@ -100,12 +100,12 @@ class InteractiveTable:
 
 
 
-    def setValue( self, aRow, aColumn, Value ):
+    def setValue( self, aRow, aColumn, Value, Titel = "\t( auto )" ):
 
         if self.__ModeCounter[ aRow ][ aColumn ] == 0:
             self.__ValueBuffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].value
             self.__TitelBuffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].title
-            self.__Widgets[aRow][aColumn].title += "\t( auto )"
+            self.__Widgets[aRow][aColumn].title += "".format( Titel )
 
         self.__Widgets[ aRow ][ aColumn ].value = Value
         self.__ModeCounter[ aRow ][ aColumn ] += 1
@@ -120,6 +120,21 @@ class InteractiveTable:
 
     def assignValue(self, aRow, aColumn, Value ):
         self.__Widgets[ aRow ][ aColumn ].value = str( Value )
+
+
+    def assignValuesSet(self, aList):
+
+        if type( aList[ 0 ] ) is list:
+            Rows = len( aList )
+            Columns = len( aList[ 0 ] )
+            for i in range( Rows ):
+                for j in range( Columns ):
+                    self.__Widgets[ i ][ j ].value = str( aList[ i ][ j ] )
+
+        else:
+            Length = len( aList )
+            for i in range( Length ):
+                self.__Widgets[ 0 ][ i ].value = str( aList[ i ] )
 
 
     def getValue(self, aRow, aColumn ):

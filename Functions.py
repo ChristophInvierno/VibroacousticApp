@@ -48,33 +48,22 @@ def ModesInBand( ElasticModulusData,
                           freq_T )
 
 
-    # Result from wave_speeds: 9 - c_L
-    #                          5 - c_S
-    #                          1 - c_B_eff
-    #                          4 - c_g_eff
-
-
-    ModDichteOben = ModaleDichte( Result[ 9 ],
-                                  Result[ 5 ],
-                                  Result[ 1 ],
-                                  Result[ 4 ],
+    ModDichteOben = ModaleDichte( Result[ "c_L" ],
+                                  Result[ "c_S" ],
+                                  Result[ "c_B_eff" ],
+                                  Result[ "c_g_eff" ],
                                   GeometryPropertiesData,
                                   Isotrop,
                                   f_o )
 
-    ModDichteUnten = ModaleDichte( Result[ 9 ],
-                                   Result[ 5 ],
-                                   Result[ 1 ],
-                                   Result[ 4 ],
+    ModDichteUnten = ModaleDichte( Result[ "c_L" ],
+                                   Result[ "c_S" ],
+                                   Result[ "c_B_eff" ],
+                                   Result[ "c_g_eff" ],
                                    GeometryPropertiesData,
                                    Isotrop,
                                    f_u )
 
-
-    # ModaleDichte() results: 0 - bending_np;
-    #                         1 - compressional_np
-    #                         2 - shear_np
-    #                         3 - sum_np
 
 
     bending = [ 0.0 ] * i.size
@@ -83,18 +72,25 @@ def ModesInBand( ElasticModulusData,
     sum = [ 0.0 ] * i.size
     for j in range(i.size):
 
-        bending[ j ] = 0.5 * ( ModDichteOben[ 0 ][ j ] + ModDichteUnten[ 0 ][ j ] ) \
+        bending[ j ] = 0.5 * ( ModDichteOben[ "bending" ][ j ]
+                               + ModDichteUnten[ "bending" ][ j ] ) \
                            * Delta_F[ j ] * 2.0 * np.pi
 
-        compressional[ j ] = 0.5 * ( ModDichteOben[ 1 ][ j ] + ModDichteUnten[ 1 ][ j ] ) \
+        compressional[ j ] = 0.5 * ( ModDichteOben[ "compressional" ][ j ]
+                                     + ModDichteUnten[ "compressional" ][ j ] ) \
                                  * Delta_F[ j ] * 2.0 * np.pi
 
-        shear[ j ] = 0.5 * ( ModDichteOben[ 2 ][ j ] + ModDichteUnten[ 2 ][ j ] ) \
+        shear[ j ] = 0.5 * ( ModDichteOben[ "shear" ][ j ]
+                             + ModDichteUnten[ "shear" ][ j ] ) \
                          * Delta_F[ j ] * 2.0 * np.pi
 
         sum[ j ] = bending[ j ] + compressional[ j ] + shear[ j ]
 
-    return [ bending, compressional, shear, sum, freq_T ]
+    return { "bending" : bending,
+             "compressional" : compressional,
+             "shear" : shear,
+             "sum" : sum,
+             "freq_T" : freq_T }
 
 
 def EigenfrequenciesPlate( ElasticModulusData,
@@ -126,10 +122,10 @@ def EigenfrequenciesPlate( ElasticModulusData,
         omega = lambda m,n: np.sqrt( D / mu ) * ((m * np.pi / length)**2 + (n * np.pi / width)**2)
 
         # Output
-        Result = [ omega( 1.0, 1.0 )/(2.0 * np.pi), \
-                   omega( 1.0, 2.0 )/(2.0 * np.pi), \
-                   omega( 2.0, 1.0 )/(2.0 * np.pi), \
-                   omega( 2.0, 2.0 )/(2.0 * np.pi) ]
+        Result = { "f11" : omega( 1.0, 1.0 )/(2.0 * np.pi), \
+                   "f12" : omega( 1.0, 2.0 )/(2.0 * np.pi), \
+                   "f21" : omega( 2.0, 1.0 )/(2.0 * np.pi), \
+                   "f22" : omega( 2.0, 2.0 )/(2.0 * np.pi) }
 
 
     if Isotrop == False:
@@ -160,10 +156,15 @@ def EigenfrequenciesPlate( ElasticModulusData,
 
         omega = lambda m, n: CoeffOne * np.sqrt( D_x*m**4 + CoeffTwo * m**2 * n**2 + CoeffThree * n**4 )
 
-        Result = [ omega( 1.0, 1.0 )/(2.0 * np.pi), \
-                   omega( 1.0, 2.0 )/(2.0 * np.pi), \
-                   omega( 2.0, 1.0 )/(2.0 * np.pi), \
-                   omega( 2.0, 2.0 )/(2.0 * np.pi) ]
+        #Result = [ omega( 1.0, 1.0 )/(2.0 * np.pi), \
+        #           omega( 1.0, 2.0 )/(2.0 * np.pi), \
+        #           omega( 2.0, 1.0 )/(2.0 * np.pi), \
+        #           omega( 2.0, 2.0 )/(2.0 * np.pi) ]
+
+        Result = { "f11" : omega( 1.0, 1.0 )/(2.0 * np.pi), \
+                   "f12" : omega( 1.0, 2.0 )/(2.0 * np.pi), \
+                   "f21" : omega( 2.0, 1.0 )/(2.0 * np.pi), \
+                   "f22" : omega( 2.0, 2.0 )/(2.0 * np.pi) }
 
 
     return Result
@@ -173,17 +174,19 @@ def ModalOverlapFactor( MaterialPropertiesData,
                         ModalDensities,
                         Frequency ):
 
-    BendingDensity = ModalDensities[ 0 ]
-    CompressionalDensity = ModalDensities[ 1 ]
-    ShearDensity = ModalDensities[ 2 ]
+    BendingDensity = ModalDensities[ "bending" ]
+    CompressionalDensity = ModalDensities[ "compressional" ]
+    ShearDensity = ModalDensities[ "shear" ]
     LossFactor = MaterialPropertiesData[ 0 ][ 1 ]
 
     Coeff = 2.0 * np.pi * LossFactor
-    Mhp_QuasiLongitudinal = [ Coeff * f * d for f, d in zip( Frequency, BendingDensity ) ]
+    Mhp_Bending = [ Coeff * f * d for f, d in zip( Frequency, BendingDensity ) ]
     Mhp_Shear = [ Coeff * f * d for f, d in zip( Frequency, ShearDensity ) ]
-    Mhp_Effective = [ Coeff * f * d for f, d in zip( Frequency, CompressionalDensity ) ]
+    Mhp_QuasiLongitudinal = [ Coeff * f * d for f, d in zip( Frequency, CompressionalDensity ) ]
 
-    return [ Mhp_QuasiLongitudinal, Mhp_Shear, Mhp_Effective ]
+    return { "Bending" : Mhp_Bending,
+             "Shear" : Mhp_Shear,
+             "QuasiLongitudinal" : Mhp_QuasiLongitudinal }
 
 
 def MaximumElementSize( C_B_Array, C_B_eff_Array, Frequency ):
@@ -192,6 +195,8 @@ def MaximumElementSize( C_B_Array, C_B_eff_Array, Frequency ):
     LamdaH_Effective = [ C_B_eff / f for C_B_eff, f in zip( C_B_eff_Array, Frequency ) ]
     ElementSize = [ 0.25 * Entry for Entry in LamdaH_Effective ]
 
-    return [ LamdaH, LamdaH_Effective, ElementSize ]
+    return { "Lamda" : LamdaH,
+             "Lamda_Eff" : LamdaH_Effective,
+             "ElementSize" : ElementSize }
 
 

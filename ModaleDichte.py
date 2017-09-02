@@ -38,9 +38,9 @@ def ModaleDichte(c_L, c_S, c_B_eff, c_g_eff, Geometry, Isotrop, freq ):
 
 
     # Prepare data that have to be returned from the function
-    Result = [ bending_np.tolist(),         #eff bemding
-               compressional_np.tolist( ),  #quasi/longitudinal
-               shear_np.tolist( ),
-               sum_np.tolist( ) ]
+    Result = { "bending" : bending_np.tolist(),         #eff bemding
+               "compressional" : compressional_np.tolist( ),  #quasi/longitudinal
+               "shear" : shear_np.tolist( ),
+               "sum" : sum_np.tolist( ) }
 
     return Result
