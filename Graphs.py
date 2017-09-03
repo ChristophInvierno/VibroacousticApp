@@ -496,8 +496,10 @@ def plotMaximumElementSize( GraphInstance ):
 
 
 def plotEigenfrequenciesPlate( GraphInstance ):
-    Text = "F<sub>11</sub> = {} Hz, F<sub>12</sub> = {} Hz, " \
-           "F<sub>21</sub> = {} Hz, F<sub>22</sub> = {} Hz".format(
+    Text = "</p>The first four Eigenfrequencies of a four-sided simply " \
+           "supported Kirchhoff-plate: <p>" \
+           "f<sub>11</sub> = {} Hz, f<sub>12</sub> = {} Hz, " \
+           "f<sub>21</sub> = {} Hz, f<sub>22</sub> = {} Hz".format(
         round( GraphInstance.Containers[ "EigenFrequency" ][ "f11" ], 2 ),
         round( GraphInstance.Containers[ "EigenFrequency" ][ "f12" ], 2 ),
         round( GraphInstance.Containers[ "EigenFrequency" ][ "f21" ], 2 ),

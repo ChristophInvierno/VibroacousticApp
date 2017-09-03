@@ -19,19 +19,19 @@ from multiprocessing import Process
 import time
 
 # Link custom files
+from theano.sparse.basic import RowScaleCSC
+
 from LatexSupport import LatexLabel
 from UnicodeSymbols import *
 from Helper import *
-from wave_speeds import *
 from Graphs import *
 from GraphClass import GraphObject
 from MessageClass import Message
-from ModaleDichte import ModaleDichte
 from Functions import *
 from Homogenization import *
 
 # TODO: change the name of the module
-from InteractiveTable import InteractiveTable
+from InteractiveTable import *
 
 
 def main( ):
@@ -76,21 +76,56 @@ def main( ):
     # CREATE TABLES:
     # ........................ Elastic Modulus table ...........................
     ELASTIC_MODULUS_TITEL = Div( text = """ELASTIC MODULUS:""" )
-    ElasticModulus = InteractiveTable( 1, 3 )
+    ElasticModulus = InteractiveTable( TableName = "ELASTIC MODULUS",
+                                       Rows = 1,
+                                       Columns =  3 )
+
     ElasticModulus.setTitels( [ [ EMODUL_X, EMODUL_Y, EMODUL_Z ] ] )
-    ElasticModulus.setValues( [ [ "1.061e10", "7.605e08", "3.667e08" ] ] )
+
+    Data = [ [ "1.061e10", "7.605e08", "3.667e08" ] ]
+    ElasticModulus.setValues( Data )
+    ElasticModulus.addBuffer( BufferName =  "DefaultIsotropic",
+                              BufferData = Data )
+
+    ElasticModulus.addBuffer( BufferName = "DefaultOrthotropic",
+                              BufferData = Data )
+
+    ElasticModulus.addBuffer( BufferName = "General",
+                              BufferData = Data )
+
+    ElasticModulus.addBuffer( BufferName = "Input",
+                              BufferData = Data )
 
 
     # ........................ Shear Modulus table .............................
     SHEAR_MODULUS_TITEL = Div( text = """SHEAR MODULUS:""" )
-    ShearModulus = InteractiveTable( 1, 3 )
+    ShearModulus = InteractiveTable( TableName = "SHEAR MODULUS",
+                                     Rows = 1,
+                                     Columns =  3 )
+
     ShearModulus.setTitels( [ [ EMODUL_XY, EMODUL_XZ, EMODUL_YZ ] ] )
-    ShearModulus.setValues( [ [ "6.900e08", "1.725e08", "9.857e07" ] ] )
+    Data = [ [ "6.900e08", "1.725e08", "9.857e07" ] ]
+
+    ShearModulus.setValues( Data )
+
+    ShearModulus.addBuffer( BufferName =  "DefaultIsotropic",
+                              BufferData = Data )
+
+    ShearModulus.addBuffer( BufferName = "DefaultOrthotropic",
+                              BufferData = Data )
+
+    ShearModulus.addBuffer( BufferName = "General",
+                              BufferData = Data )
+
+    ShearModulus.addBuffer( BufferName = "Input",
+                              BufferData = Data )
 
 
     # ........................ Poissons ratios ................................
     POISSON_RATIO_TITEL = Div( text = """POISSON'S RATIOS:""" )
-    PoissonRatios = InteractiveTable( 2, 3 )
+    PoissonRatios = InteractiveTable( TableName = "POISSON'S RATIOS",
+                                      Rows = 2,
+                                      Columns = 3 )
     PoissonRatios.setTitels( [ [ POISSON_RATIO_XY,
                                  POISSON_RATIO_XZ,
                                  POISSON_RATIO_YZ ],
@@ -98,29 +133,95 @@ def main( ):
                                  POISSON_RATIO_ZX + "\t( auto )",
                                  POISSON_RATIO_ZY + "\t( auto )" ] ] )
 
+    DataIsotropic = [ [ "0.3", "0.3", "0.3" ],
+                      [ "0.3", "0.3", "0.3" ] ]
 
-    PoissonRatios.setValues( [ [ "1.184", "1.771", "0.382" ],
-                               [ "0.085", "0.061", "0.184" ] ] )
+    DataOrthotropic = [ [ "1.184", "1.771", "0.382" ],
+                        [ "0.085", "0.061", "0.184" ] ]
+
+    PoissonRatios.setValues( DataOrthotropic )
+
+    PoissonRatios.addBuffer( BufferName = "DefaultIsotropic",
+                             BufferData = DataIsotropic )
+
+    PoissonRatios.addBuffer( BufferName = "DefaultOrthotropic",
+                             BufferData = DataOrthotropic )
+
+    PoissonRatios.addBuffer( BufferName = "GeneralIsotropic",
+                             BufferData = DataIsotropic )
+
+    PoissonRatios.addBuffer( BufferName = "GeneralOrthotropic",
+                             BufferData = DataOrthotropic )
+
+    PoissonRatios.addBuffer( BufferName = "Input",
+                             BufferData = DataOrthotropic )
 
 
     # ........................ Material Properties table .......................
     MATERIALS_TITEL = Div( text = """MATERIAL PROPERTIES:""" )
-    MaterialProperties = InteractiveTable( 1, 2 )
+    MaterialProperties = InteractiveTable( TableName = "MATERIAL PROPERTIES",
+                                           Rows = 1,
+                                           Columns = 2 )
     MaterialProperties.setTitels( [ [ "Density", "Loss Factor" ] ] )
-    MaterialProperties.setValues( [ [ "450.0", "0.012" ] ] )
+
+    Data = [ [ "450.0", "0.012" ] ]
+    MaterialProperties.setValues( Data )
+
+    MaterialProperties.setValues( Data )
+
+    MaterialProperties.addBuffer( BufferName = "DefaultIsotropic",
+                                  BufferData = Data )
+
+    MaterialProperties.addBuffer( BufferName = "DefaultOrthotropic",
+                                  BufferData = Data )
+
+    MaterialProperties.addBuffer( BufferName = "General",
+                                  BufferData = Data )
+
+    MaterialProperties.addBuffer( BufferName = "Input",
+                                  BufferData = Data )
 
 
     # ........................ Geometry table .......................
     GEOMETRY_TITEL = Div( text = """GEOMETRY:""" )
-    GeometryProperties = InteractiveTable( 1, 3 )
+    GeometryProperties = InteractiveTable( TableName = "GEOMETRY",
+                                           Rows =  1,
+                                           Columns =  3 )
+
     GeometryProperties.setTitels( [ [ "Length", "Width", "LayersThikness" ] ] )
-    GeometryProperties.setValues( [ [ "2.5", "3.0", "0.081" ] ] )
+
+    Data = [ [ "2.5", "3.0", "0.081" ] ]
+    GeometryProperties.setValues( Data )
+
+    GeometryProperties.setValues( Data )
+
+    GeometryProperties.addBuffer( BufferName = "DefaultIsotropic",
+                                  BufferData = Data )
+
+    GeometryProperties.addBuffer( BufferName = "DefaultOrthotropic",
+                                  BufferData = Data )
+
+    GeometryProperties.addBuffer( BufferName = "General",
+                                  BufferData = Data )
+
+    GeometryProperties.addBuffer( BufferName = "Input",
+                                  BufferData = Data )
+
+
+
+    ElasticModulus.fillTableWithBufferData( "DefaultOrthotropic" )
+    ShearModulus.fillTableWithBufferData( "DefaultOrthotropic" )
+    PoissonRatios.fillTableWithBufferData( "DefaultOrthotropic" )
+    MaterialProperties.fillTableWithBufferData( "DefaultOrthotropic" )
+    GeometryProperties.fillTableWithBufferData( "DefaultOrthotropic" )
+
 
     Tables = { "ElasticModulus" : ElasticModulus,
                "ShearModulus" : ShearModulus,
                "PoissonRatios" : PoissonRatios,
                "MaterialProperties" : MaterialProperties,
                "GeometryProperties" : GeometryProperties }
+
 
     # CREATE BUTTONS:
     SetDefaultButton = Button( label = "Default",
@@ -143,15 +244,14 @@ def main( ):
                         width = 100 )
 
 
-
     ModeRadioButtons = RadioButtonGroup( labels = [ "Orthotropic Material",
                                                     "Isotropic Material" ],
                                          width = 500,
                                          active = 0 )
 
 
-    WarningMessage = Message( Color = "red",
-                              Size = 2 ,
+    WarningMessage = Message( Color = "Blue",
+                              Size = 3 ,
                               MessageHeader = "Warning: " );
 
 
@@ -166,7 +266,6 @@ def main( ):
                         PrintReport ) )
 
 
-
     LeftSide = column( ModeRadioButtons,
                         ELASTIC_MODULUS_TITEL,
                         ElasticModulus.Table,
@@ -177,9 +276,11 @@ def main( ):
                         MATERIALS_TITEL,
                         MaterialProperties.Table,
                         GEOMETRY_TITEL,
-                        GeometryProperties.Table )
+                        GeometryProperties.Table,
+                        WarningMessage.Widget  )
 
-    RightSide = column( Graph.Widget , Buttons, WarningMessage.Widget )
+
+    RightSide = column( Graph.Widget , Buttons )
 
 
     # ========================= COMMUNICATION PART =============================
@@ -213,6 +314,9 @@ def main( ):
                                         WarningMessage ) )
 
 
+    ShowInput.on_click( partial( showInput, Tables ) )
+
+
     # ================= RUN SIMULATION WITH DEFAULT DATA =====================
     updateData( Tables, Graph, WarningMessage )
 
@@ -244,16 +348,22 @@ def updateData( Tables, Graph, WarningMessage ):
 
         # Homogenize the input data
         if len(Layers) != 1:
+            makeMultiLayerMask( Tables )
+
             HomogenizedData = homogenize( Tables[ "ElasticModulus" ].getData( )[ 0 ],
                                           Tables[ "ShearModulus" ].getData( )[ 0 ],
                                           Tables[ "PoissonRatios" ].getData( ),
                                           Layers )
+
+            #cangeMode( Tables, WarningMessage, Graph.getMode( ) )
 
             Tables[ "ElasticModulus" ].assignValuesSet( HomogenizedData[ "ElasticModulus" ] )
             Tables[ "ShearModulus" ].assignValuesSet( HomogenizedData[ "ShearModulus" ] )
             Tables[ "PoissonRatios" ].assignValuesSet( HomogenizedData[ "PoissonRatios" ] )
             Tables[ "GeometryProperties" ].assignValue( 0, 2, HomogenizedData[ "TotalThickness" ] )
 
+
+        makeMask( Tables, Graph.getMode() )
 
         # before calling user-define functions check the current mode
         cangeMode( Tables, WarningMessage, Graph.getMode() )
@@ -339,6 +449,9 @@ def updateData( Tables, Graph, WarningMessage ):
     except WrongLayersThikness as Error:
         WarningMessage.printMessage( str(Error) )
 
+    except TableCorrupted as Error:
+        WarningMessage.printMessage( str(Error) )
+
 
     except:
         Message = "Error: Unexpected error. Please, refer to the code"
@@ -392,6 +505,9 @@ def cangeMode( Tables, WarningMessage, Mode ):
 
     if ( Mode == 1 ):
 
+        Tables [ "PoissonRatios" ].fillTableWithBufferData( "GeneralIsotropic" )
+
+
         UniformValue = Tables[ "ElasticModulus" ].getValue( 0, 0 )
         Tables[ "ElasticModulus" ].setValue( 0, 1, UniformValue )
         Tables[ "ElasticModulus" ].setValue( 0, 2, UniformValue )
@@ -414,6 +530,9 @@ def cangeMode( Tables, WarningMessage, Mode ):
 
 
     if ( Mode == 0 ):
+
+        Tables[ "PoissonRatios" ].fillTableWithBufferData( "GeneralOrthotropic" )
+
         Tables[ "ElasticModulus" ].restoreValue( 0, 1 )
         Tables[ "ElasticModulus" ].restoreValue( 0, 2 )
 
@@ -421,8 +540,8 @@ def cangeMode( Tables, WarningMessage, Mode ):
         Tables[ "ShearModulus" ].restoreValue( 0, 1 )
         Tables[ "ShearModulus" ].restoreValue( 0, 2 )
 
-        Tables[ "PoissonRatios" ].restoreValue( 0, 1 )
-        Tables[ "PoissonRatios" ].restoreValue( 0, 2 )
+        #Tables[ "PoissonRatios" ].restoreValue( 0, 1 )
+        #Tables[ "PoissonRatios" ].restoreValue( 0, 2 )
 
     precomputePoissonRatios( Tables )
 
@@ -457,12 +576,86 @@ def setDeafultSettings( Tables,
 
     WarningMessage.clean()
 
-    Tables[ "ElasticModulus" ].resetByDefault( )
-    Tables[ "ShearModulus" ].resetByDefault( )
-    Tables[ "PoissonRatios" ].resetByDefault( )
-    Tables[ "GeometryProperties" ].resetByDefault( )
+    if Graph.getMode() == 0:
+
+        Tables[ "ElasticModulus" ].fillTableWithBufferData( "DefaultOrthotropic" )
+        Tables[ "ShearModulus" ].fillTableWithBufferData( "DefaultOrthotropic" )
+        Tables[ "PoissonRatios" ].fillTableWithBufferData( "DefaultOrthotropic" )
+        Tables[ "MaterialProperties" ].fillTableWithBufferData( "DefaultOrthotropic" )
+        Tables[ "GeometryProperties" ].fillTableWithBufferData( "DefaultOrthotropic" )
+
+    if Graph.getMode() == 1:
+        Tables[ "ElasticModulus" ].fillTableWithBufferData( "DefaultIsotropic" )
+        Tables[ "ShearModulus" ].fillTableWithBufferData( "DefaultIsotropic" )
+        Tables[ "PoissonRatios" ].fillTableWithBufferData( "DefaultIsotropic" )
+        Tables[ "MaterialProperties" ].fillTableWithBufferData( "DefaultIsotropic" )
+        Tables[ "GeometryProperties" ].fillTableWithBufferData( "DefaultIsotropic" )
+
+    #Tables[ "ElasticModulus" ].resetByDefault( )
+    #Tables[ "ShearModulus" ].resetByDefault( )
+    #Tables[ "PoissonRatios" ].resetByDefault( )
+    #Tables[ "GeometryProperties" ].resetByDefault( )
 
     updateData( Tables, Graph, WarningMessage )
+
+
+def showInput( Tables ):
+
+    Tables[ "ElasticModulus" ].fillTableWithBufferData( "Input" )
+    Tables[ "ShearModulus" ].fillTableWithBufferData( "Input")
+    Tables[ "PoissonRatios" ].fillTableWithBufferData( "Input" )
+    Tables[ "MaterialProperties" ].fillTableWithBufferData( "Input" )
+    Tables[ "GeometryProperties" ].fillTableWithBufferData( "Input" )
+
+
+def makeMask( Tables, Mode ):
+
+    # get data from the corresponding tables
+    ElasticModulusData = Tables[ "ElasticModulus" ].getRawData( )
+    ShearModulusData = Tables[ "ShearModulus" ].getRawData( )
+    PoissonRatiosData = Tables[ "PoissonRatios" ].getRawData( )
+    MaterialPropertiesData = Tables[ "MaterialProperties" ].getRawData( )
+    GeometryPropertiesData = Tables[ "GeometryProperties" ].getRawData( )
+
+
+    Tables[ "ElasticModulus" ].setBufferData( "General", ElasticModulusData )
+
+    Tables[ "ShearModulus" ].setBufferData( "General", ShearModulusData )
+
+    Tables[ "MaterialProperties" ].setBufferData( "General", MaterialPropertiesData )
+
+    Tables[ "GeometryProperties" ].setBufferData( "General", GeometryPropertiesData )
+
+
+    if Mode == 0:
+        Tables[ "PoissonRatios" ].setBufferData( "GeneralOrthotropic",
+                                                 PoissonRatiosData )
+
+    elif Mode == 1:
+        Tables[ "PoissonRatios" ].setBufferData( "GeneralIsotropic",
+                                                 PoissonRatiosData )
+
+
+def makeMultiLayerMask( Tables ):
+
+    # get data from the corresponding tables
+    ElasticModulusData = Tables[ "ElasticModulus" ].getRawData( )
+    ShearModulusData = Tables[ "ShearModulus" ].getRawData( )
+    PoissonRatiosData = Tables[ "PoissonRatios" ].getRawData( )
+    MaterialPropertiesData = Tables[ "MaterialProperties" ].getRawData( )
+
+    # we're using implicit method to get value from tables since the
+    # the last entry represents a string of layers thickness
+    GeometryPropertiesData = [ [ Tables[ "GeometryProperties" ].getValue( 0, 0 ),
+                                 Tables[ "GeometryProperties" ].getValue( 0, 1 ),
+                                 Tables[ "GeometryProperties" ].getValue( 0, 2 ) ] ]
+
+
+    Tables[ "ElasticModulus" ].setBufferData( "Input", ElasticModulusData )
+    Tables[ "ShearModulus" ].setBufferData( "Input", ShearModulusData )
+    Tables[ "PoissonRatios" ].setBufferData( "Input", PoissonRatiosData )
+    Tables[ "MaterialProperties" ].setBufferData( "Input", MaterialPropertiesData )
+    Tables[ "GeometryProperties" ].setBufferData( "Input", GeometryPropertiesData )
 
 
 main( )

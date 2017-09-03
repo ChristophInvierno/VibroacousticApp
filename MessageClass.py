@@ -5,6 +5,7 @@ class Message:
 
     def __init__(self, Color = "red",
                  Size = 4,
+                 FontStyle = "b",
                  MessageHeader = 'Message: ',
                  Width = 500,
                  Hight = 20 ):
@@ -13,7 +14,7 @@ class Message:
         self.Header = MessageHeader
         self.Color = Color
         self.Size = Size
-
+        self.FontStyle = FontStyle
 
         self.Widget = Div( text = "",
                            render_as_text = False,
@@ -32,6 +33,8 @@ class Message:
 
     def _updateObject(self):
         self.Widget.text = """
-        <p><b><font size="{}" color="{}">
+        <p><{}><font size="{}" color="{}">
         {}
-        </font></b></p>""".format( self.Size, self.Color,self.Text )
+        </font></{}></p>""".format( self.FontStyle ,self.Size,
+                                    self.Color,self.Text,
+                                    self.FontStyle )

@@ -53,7 +53,8 @@ class GraphObject:
 
         self.TextWidget = Message( Color = "Black",
                                    Size = 2 ,
-                                   MessageHeader = "Eigen Frequencies: ",
+                                   FontStyle = "n",
+                                   MessageHeader = "",
                                    Width = self.Width  );
 
 
@@ -69,7 +70,8 @@ class GraphObject:
                              y_axis_type = "log",
                              x_axis_type = "log",
                              tools = TOOLS,
-                             toolbar_location = "above")
+                             toolbar_location = "above",
+                             x_range = [1, 10000])
 
         self.Graph.yaxis.axis_label = "Default"
         self.Graph.xaxis.axis_label = "Default"

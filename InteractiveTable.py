@@ -14,12 +14,14 @@ class TableCorrupted(Exception):
 class InteractiveTable:
     MINIMUM_WIDGET_HEIGHT = 1
 
-    def __init__( self, Rows, Columns ):
+    def __init__( self, TableName, Rows, Columns ):
+        self.__TableName = TableName
         self.__nRows = Rows
         self.__nColumns = Columns
 
         self.__LableHeight = 65
         self.__LableWidth = 200
+        self.__Buffer = { }
 
         self.__ModeCounter = np.zeros(( Rows, Columns ), dtype = int)
 
@@ -48,18 +50,84 @@ class InteractiveTable:
         self.Table = column( Columns )
 
 
+
+    def addBuffer(self, BufferName, BufferData = None ):
+
+        if BufferData == None:
+            # Fill out the buffer with the default values if the user doesn't
+            # provide the buffer data
+            aRow = [ "0.0" ] * self.__nColumns
+            BufferData = [ aRow ] * self.__nRows
+
+        self.__TestNewBufferData( BufferData )
+
+        self.__Buffer[ str(BufferName) ] = BufferData
+
+
+    def getBufferData(self, BufferName ):
+        self.__TestBufferName( BufferName )
+        return self.__Buffer[ BufferName ]
+
+
+    def setBufferData(self, BufferName, Data):
+        self.__TestBufferName( BufferName )
+        self.__TestNewBufferData( Data )
+
+        self.__Buffer[ BufferName ] = Data
+
+
+    def makeBufferMask(self, BufferName):
+        self.__TestBufferName( BufferName )
+
+        for i in range( self.__nRows ):
+            for j in range( self.__nColumns ):
+                self.__Buffer[ BufferName ][ i ][ j ] = self.__Widgets[ i ][ j ]
+
+
+    def fillTableWithBufferData(self, BufferName):
+        self.__TestBufferName( BufferName )
+
+        for i in range( self.__nRows ):
+            for j in range( self.__nColumns ):
+                self.__Widgets[ i ][ j ].value = self.__Buffer[ BufferName ][ i ][ j ]
+
+
+    def __TestBufferName(self, BufferName):
+
+        try:
+            return self.__Buffer[ BufferName ]
+
+        except KeyError:
+            raise TableCorrupted( "table \"{}\" doesn't have the "
+                                  "buffer \"{}\"".format( self.__TableName,
+                                                          BufferName ) )
+
+
+    def __TestNewBufferData(self, Data):
+
+
+        nRows = len( Data )
+        nColumns = len( Data[ 0 ] )
+
+        if nRows != self.__nRows or nColumns != self.__nColumns:
+            raise TableCorrupted( "error in \"addBuffer\" function. "
+                                  "( buffer name:  \"{}\" ) "
+                                  "Wrong dimensions of the buffer data. "
+                                  "It doesn't match with the number of rows and "
+                                  "columns in the table".format( Data ) )
+
     def setTitels(self, Titels):
 
         # Check if the input data is consistent i.e.
         # check the number of rows and columns
 
         if ( len( Titels ) != self.__nRows ):
-            raise TableCorrupted( "ERROR from setValues: wrong number of " +\
+            raise TableCorrupted( "ERROR from setValues: wrong number of " + \
                                     "rows were passed")
 
         for Entry in Titels:
             if ( len(Entry) != self.__nColumns ):
-                raise TableCorrupted( "ERROR from setValues: wrong number of " +\
+                raise TableCorrupted( "ERROR from setValues: wrong number of " + \
                                        "columns were passed")
 
 
@@ -142,7 +210,13 @@ class InteractiveTable:
 
 
     def getFloatValue(self, aRow, aColumn ):
-        return float( self.__Widgets[ aRow ][ aColumn ].value )
+        try:
+            return float( self.__Widgets[ aRow ][ aColumn ].value )
+        except ValueError:
+            raise TableCorrupted("wrong formant of the "
+                                 "entry: {}, {}; table: {}".format( aRow + 1 ,
+                                                                    aColumn + 1,
+                                                                    self.__TableName))
 
 
     def resetByDefault(self):
@@ -164,19 +238,33 @@ class InteractiveTable:
                 try:
                     Temp.append( float( self.__Widgets[ i ][ j ].value ) )
                 except ValueError:
-                    self.__Widgets[ i ][ j ].value = self.__DefaultValues[ i ][ j ]
+                    #self.__Widgets[ i ][ j ].value = self.__DefaultValues[ i ][ j ]
+                    raise TableCorrupted("wrong formant of the "
+                                         "entry: {}, {}; table: {}".format( i + 1,
+                                                                            j + 1,
+                                                                            self.__TableName))
             Data.append( Temp )
 
         return Data
 
 
-#    def disableElement(self, aRow, aColumn, Mode ):
-#
-#        if Mode == 1:
-#            self.__Buffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].value
-#            self.__Widgets[ aRow ][ aColumn ].height = InteractiveTable.MINIMUM_WIDGET_HEIGHT
-#
-#        elif Mode == 0:
-#            self.__Widgets[aRow][aColumn].value = self.__Buffer[aRow][aColumn]
-#            self.__Widgets[aRow][aColumn].height = self.__LableHeight
+    def getRawData( self ):
 
+        Data = [ ]
+        for i in range( self.__nRows ):
+            Temp = [ ]
+
+            for j in range( self.__nColumns ):
+                try:
+                    Dummy = float( self.__Widgets[ i ][ j ].value )
+                    Temp.append( self.__Widgets[ i ][ j ].value )
+
+                except ValueError:
+                    #self.__Widgets[ i ][ j ].value = self.__DefaultValues[ i ][ j ]
+                    raise TableCorrupted( "wrong formant of the "
+                                          "entry: {}, {};"
+                                          " table: {}".format( i + 1,
+                                                               j + 1,
+                                                               self.__TableName ) )
+            Data.append( Temp )
+        return Data
