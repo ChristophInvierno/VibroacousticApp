@@ -19,7 +19,6 @@ from multiprocessing import Process
 import time
 
 # Link custom files
-from theano.sparse.basic import RowScaleCSC
 
 from LatexSupport import LatexLabel
 from UnicodeSymbols import *
@@ -82,19 +81,24 @@ def main( ):
 
     ElasticModulus.setTitels( [ [ EMODUL_X, EMODUL_Y, EMODUL_Z ] ] )
 
-    Data = [ [ "1.061e10", "7.605e08", "3.667e08" ] ]
-    ElasticModulus.setValues( Data )
+    IsotropicData = [ [ "1.061e10", "1.061e10", "1.061e10" ] ]
+    OrthotropicData = [ [ "1.061e10", "7.605e08", "3.667e08" ] ]
+    ElasticModulus.setValues( OrthotropicData )
     ElasticModulus.addBuffer( BufferName =  "DefaultIsotropic",
-                              BufferData = Data )
+                              BufferData = IsotropicData )
 
     ElasticModulus.addBuffer( BufferName = "DefaultOrthotropic",
-                              BufferData = Data )
+                              BufferData = OrthotropicData )
 
-    ElasticModulus.addBuffer( BufferName = "General",
-                              BufferData = Data )
+    ElasticModulus.addBuffer( BufferName = "GeneralIsotropic",
+                              BufferData = IsotropicData )
+
+    ElasticModulus.addBuffer( BufferName = "GeneralOrthotropic",
+                              BufferData = OrthotropicData )
+
 
     ElasticModulus.addBuffer( BufferName = "Input",
-                              BufferData = Data )
+                              BufferData = OrthotropicData )
 
 
     # ........................ Shear Modulus table .............................
@@ -104,21 +108,26 @@ def main( ):
                                      Columns =  3 )
 
     ShearModulus.setTitels( [ [ EMODUL_XY, EMODUL_XZ, EMODUL_YZ ] ] )
-    Data = [ [ "6.900e08", "1.725e08", "9.857e07" ] ]
+    OrthotropicData = [ [ "6.900e08", "1.725e08", "9.857e07" ] ]
+    IsotropicData = [ [ "6.900e08", "6.900e08", "6.900e08" ] ]
 
-    ShearModulus.setValues( Data )
+    ShearModulus.setValues( OrthotropicData )
 
     ShearModulus.addBuffer( BufferName =  "DefaultIsotropic",
-                              BufferData = Data )
+                              BufferData = IsotropicData )
 
     ShearModulus.addBuffer( BufferName = "DefaultOrthotropic",
-                              BufferData = Data )
+                              BufferData = OrthotropicData )
 
-    ShearModulus.addBuffer( BufferName = "General",
-                              BufferData = Data )
+    ShearModulus.addBuffer( BufferName = "GeneralIsotropic",
+                              BufferData = IsotropicData )
+
+
+    ShearModulus.addBuffer( BufferName = "GeneralOrthotropic",
+                              BufferData = OrthotropicData )
 
     ShearModulus.addBuffer( BufferName = "Input",
-                              BufferData = Data )
+                              BufferData = OrthotropicData )
 
 
     # ........................ Poissons ratios ................................
@@ -497,6 +506,18 @@ def updateMode( Tables,
     WarningMessage.clean( )
     Graph.setMode( Properties )
 
+    WarningMessage.printMessage( "Click on the Apply button to update grapths..." )
+    if Properties == 0:
+        Tables[ "ElasticModulus" ].fillTableWithBufferData( "GeneralOrthotropic" )
+        Tables[ "ShearModulus" ].fillTableWithBufferData( "GeneralOrthotropic" )
+        Tables[ "PoissonRatios" ].fillTableWithBufferData( "GeneralOrthotropic" )
+
+    elif Properties == 1:
+        Tables[ "ElasticModulus" ].fillTableWithBufferData( "GeneralIsotropic" )
+        Tables[ "ShearModulus" ].fillTableWithBufferData( "GeneralIsotropic" )
+        Tables[ "PoissonRatios" ].fillTableWithBufferData( "GeneralIsotropic" )
+
+
     cangeMode( Tables, WarningMessage, Graph.getMode() )
 
 
@@ -504,8 +525,6 @@ def cangeMode( Tables, WarningMessage, Mode ):
 
 
     if ( Mode == 1 ):
-
-        Tables [ "PoissonRatios" ].fillTableWithBufferData( "GeneralIsotropic" )
 
 
         UniformValue = Tables[ "ElasticModulus" ].getValue( 0, 0 )
@@ -530,9 +549,7 @@ def cangeMode( Tables, WarningMessage, Mode ):
 
 
     if ( Mode == 0 ):
-
-        Tables[ "PoissonRatios" ].fillTableWithBufferData( "GeneralOrthotropic" )
-
+        """
         Tables[ "ElasticModulus" ].restoreValue( 0, 1 )
         Tables[ "ElasticModulus" ].restoreValue( 0, 2 )
 
@@ -540,9 +557,10 @@ def cangeMode( Tables, WarningMessage, Mode ):
         Tables[ "ShearModulus" ].restoreValue( 0, 1 )
         Tables[ "ShearModulus" ].restoreValue( 0, 2 )
 
-        #Tables[ "PoissonRatios" ].restoreValue( 0, 1 )
-        #Tables[ "PoissonRatios" ].restoreValue( 0, 2 )
-
+        Tables[ "PoissonRatios" ].restoreValue( 0, 1 )
+        Tables[ "PoissonRatios" ].restoreValue( 0, 2 )
+        """
+        pass
     precomputePoissonRatios( Tables )
 
 
@@ -618,20 +636,31 @@ def makeMask( Tables, Mode ):
     GeometryPropertiesData = Tables[ "GeometryProperties" ].getRawData( )
 
 
-    Tables[ "ElasticModulus" ].setBufferData( "General", ElasticModulusData )
-
-    Tables[ "ShearModulus" ].setBufferData( "General", ShearModulusData )
-
     Tables[ "MaterialProperties" ].setBufferData( "General", MaterialPropertiesData )
 
     Tables[ "GeometryProperties" ].setBufferData( "General", GeometryPropertiesData )
 
 
     if Mode == 0:
+
+        Tables[ "ElasticModulus" ].setBufferData( "GeneralOrthotropic",
+                                                  ElasticModulusData )
+
+        Tables[ "ShearModulus" ].setBufferData( "GeneralOrthotropic",
+                                                ShearModulusData )
+
         Tables[ "PoissonRatios" ].setBufferData( "GeneralOrthotropic",
                                                  PoissonRatiosData )
 
+
     elif Mode == 1:
+
+        Tables[ "ElasticModulus" ].setBufferData( "GeneralIsotropic",
+                                                  ElasticModulusData )
+
+        Tables[ "ShearModulus" ].setBufferData( "GeneralIsotropic",
+                                                ShearModulusData )
+
         Tables[ "PoissonRatios" ].setBufferData( "GeneralIsotropic",
                                                  PoissonRatiosData )
 

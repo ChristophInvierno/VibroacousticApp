@@ -157,8 +157,8 @@ class InteractiveTable:
 
 
         # initilize buffers by default values
-        self.__DefaultValues = deepcopy(Values)
-        self.__ValueBuffer = deepcopy(Values)
+        #self.__DefaultValues = deepcopy(Values)
+        #self.__ValueBuffer = deepcopy(Values)
 
 
 
@@ -171,7 +171,7 @@ class InteractiveTable:
     def setValue( self, aRow, aColumn, Value, Titel = "\t( auto )" ):
 
         if self.__ModeCounter[ aRow ][ aColumn ] == 0:
-            self.__ValueBuffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].value
+            #self.__ValueBuffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].value
             self.__TitelBuffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].title
             self.__Widgets[aRow][aColumn].title += "".format( Titel )
 
@@ -181,7 +181,7 @@ class InteractiveTable:
 
     def restoreValue( self, aRow, aColumn ):
         if self.__ModeCounter[ aRow ][ aColumn ] != 0:
-            self.__Widgets[aRow][aColumn].value = self.__ValueBuffer[aRow][aColumn]
+            #self.__Widgets[aRow][aColumn].value = self.__ValueBuffer[aRow][aColumn]
             self.__Widgets[aRow][aColumn].title = self.__TitelBuffer[aRow][aColumn]
             self.__ModeCounter[ aRow ][ aColumn ] = 0
 
@@ -219,12 +219,12 @@ class InteractiveTable:
                                                                     self.__TableName))
 
 
-    def resetByDefault(self):
-
-        self.__ValueBuffer = deepcopy( self.__DefaultValues )
-        for i in range( self.__nRows ) :
-            for j in range( self.__nColumns ):
-                self.__Widgets[ i ][ j ].value = self.__DefaultValues[ i ][ j ]
+    #def resetByDefault(self):
+    #
+    #    self.__ValueBuffer = deepcopy( self.__DefaultValues )
+    #    for i in range( self.__nRows ) :
+    #        for j in range( self.__nColumns ):
+    #            self.__Widgets[ i ][ j ].value = self.__DefaultValues[ i ][ j ]
 
 
 
