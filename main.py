@@ -56,7 +56,7 @@ def main( ):
                            "Modal Density",
                            "Modal Overlap Factor",
                            "Maximum Element Size (FEM)",
-                           "Layers Scheme"],
+                           "Scheme"],
                             FrequencyRange,
                             Width = 850,
                             Height = 550)
@@ -167,7 +167,7 @@ def main( ):
 
 
     # ........................ Material Properties table .......................
-    MATERIALS_TITEL = Div( text = """MATERIAL PROPERTIES:""" )
+    MATERIALS_TITEL = Div( text = """FURTHER MATERIAL PROPERTIES:""" )
     MaterialProperties = InteractiveTable( TableName = "MATERIAL PROPERTIES",
                                            Rows = 1,
                                            Columns = 2 )
@@ -197,7 +197,7 @@ def main( ):
                                            Rows =  1,
                                            Columns =  3 )
 
-    GeometryProperties.setTitels( [ [ "Length", "Width", "LayersThikness" ] ] )
+    GeometryProperties.setTitels( [ [ "Length", "Width", "Thickness of the layers*" ] ] )
 
     Data = [ [ "2.5", "3.0", "0.081" ] ]
     GeometryProperties.setValues( Data )
@@ -234,22 +234,22 @@ def main( ):
 
     # CREATE BUTTONS:
     SetDefaultButton = Button( label = "Default",
-                               button_type = "success",
+                               button_type = "primary",
                                width = 100 )
 
 
     ApplyButton = Button( label = "Apply",
-                          button_type = "success",
+                          button_type = "primary",
                           width = 100 )
 
 
     PrintReport = Button( label = "Print Report",
-                          button_type = "success",
+                          button_type = "primary",
                           width = 100 )
 
 
     ShowInput = Button( label = "Show Input",
-                        button_type = "success",
+                        button_type = "primary",
                         width = 100 )
 
 
@@ -259,18 +259,24 @@ def main( ):
                                          active = 0 )
 
 
-    WarningMessage = Message( Color = "Blue",
+    WarningMessage = Message( Color = "grey",
                               Size = 3 ,
                               MessageHeader = "Warning: " );
 
 
+    Info = Div( text = "*Thickness of top to center layer separated by "
+                       "comma, semicolon or space",
+                render_as_text = False,
+                width = 500,
+                height = 20 )
+
     # SPECIFY THE LAYOUT:
     Buttons = row( row( Spacer( width = 50 ),
-                        SetDefaultButton,
+                        ApplyButton,
                         Spacer( width = 50 ),
                         ShowInput,
                         Spacer( width = 50 ),
-                        ApplyButton,
+                        SetDefaultButton,
                         Spacer( width = 50 ),
                         PrintReport ) )
 
@@ -286,7 +292,8 @@ def main( ):
                         MaterialProperties.Table,
                         GEOMETRY_TITEL,
                         GeometryProperties.Table,
-                        WarningMessage.Widget  )
+                        Info,
+                        WarningMessage.Widget )
 
 
     RightSide = column( Graph.Widget , Buttons )
@@ -506,7 +513,7 @@ def updateMode( Tables,
     WarningMessage.clean( )
     Graph.setMode( Properties )
 
-    WarningMessage.printMessage( "Click on the Apply button to update grapths..." )
+    #WarningMessage.printMessage( "Click on the Apply button to update grapths..." )
     if Properties == 0:
         Tables[ "ElasticModulus" ].fillTableWithBufferData( "GeneralOrthotropic" )
         Tables[ "ShearModulus" ].fillTableWithBufferData( "GeneralOrthotropic" )

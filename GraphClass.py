@@ -71,7 +71,9 @@ class GraphObject:
                              x_axis_type = "log",
                              tools = TOOLS,
                              toolbar_location = "above",
-                             x_range = [1, 10000])
+                             x_range = [1, 10000] )
+
+        self.Graph.y_range.range_padding = 0.0
 
         self.Graph.yaxis.axis_label = "Default"
         self.Graph.xaxis.axis_label = "Default"

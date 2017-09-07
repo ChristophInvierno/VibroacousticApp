@@ -17,8 +17,10 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # Find the maximum values in both x and y direction to be able to
     # depict both vertical and horizontal lines
     MaxCoordinateY = max( GraphInstance.Containers[ "WaveVelocity" ][ "c_g" ] )
+    #MinCoordinateY = min( GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
+    MinCoordinateY = 1.0
+
     MaxCoordinateX = max( GraphInstance.getRange( ) )
-    MinCoordinateY = min( GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
     MinCoordinateX = min( GraphInstance.getRange( ) )
 
     # ............................ c_L graph ...................................
@@ -157,7 +159,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.defineLine( 10, 'Thin-Plate-Limit Group',
                               ORANGE,
-                              'dashed' )
+                              'dotted' )
 
 
     # .................... fR_B graph .............................
@@ -171,7 +173,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.defineLine( 11, 'Thin-Plate-Limit Phase',
                               GREEN,
-                              'dashed' )
+                              'dotted' )
 
 
     # ................... f_thickmode_shear_y graph ............................
@@ -186,7 +188,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     #plt.loglog( RangeX, RangeY, linestyle = '--', color = LIGHT_BLUE )
     GraphInstance.defineLine( 12, '1st Thickness-shear resonance (G32)',
                               LIGHT_BLUE,
-                              'dashed' )
+                              'dotted' )
 
 
     # .................... f_thickmode_shear graph .............................
@@ -200,7 +202,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.defineLine( 13, '1st Thickness-shear resonance (G31)',
                               LIGHT_BLUE,
-                              'dashed' )
+                              'dotted' )
 
 
     # ................... f_thickmode_shear_x graph ............................
@@ -215,7 +217,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.defineLine( 14, '1st Thickness-stretch resonance',
                               DARK_BLUE,
-                              'dotdash' )
+                              'dotted' )
 
 
 def plotWaveSpeedGraph( GraphInstance ):

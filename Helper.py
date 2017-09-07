@@ -83,8 +83,8 @@ def parseString( aString ):
             LayersThickness.append( float(aWord) )
 
     except:
-        raise WrongLayersThikness( "The data format for the layers thikness is wrong. "
-                                  "Please, refer to the documentation" )
+        raise WrongLayersThikness( "The data format for the layers thickness is wrong. "
+                                   "The delimiter can be comma, semicolon or space.")
 
     return LayersThickness
 
