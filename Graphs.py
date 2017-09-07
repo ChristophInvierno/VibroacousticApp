@@ -17,8 +17,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     # Find the maximum values in both x and y direction to be able to
     # depict both vertical and horizontal lines
     MaxCoordinateY = max( GraphInstance.Containers[ "WaveVelocity" ][ "c_g" ] )
-    #MinCoordinateY = min( GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
-    MinCoordinateY = 1.0
+    MinCoordinateY = min( GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
 
     MaxCoordinateX = max( GraphInstance.getRange( ) )
     MinCoordinateX = min( GraphInstance.getRange( ) )
