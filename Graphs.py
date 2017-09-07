@@ -45,7 +45,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     GraphInstance.GraphData[ 1 ].data = dict( XData = RangeX,
                                                YData = RangeY )
 
-    GraphInstance.defineLine( 1, 'Longitudinal out-of-plane',
+    GraphInstance.defineLine( 1, 'Longitudinal, out-of-plane',
                               DARK_BLUE,
                               'dashed' )
 
@@ -73,7 +73,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     GraphInstance.GraphData[ 3 ].data = dict( XData = RangeX,
                                                YData = RangeY )
 
-    GraphInstance.defineLine( 3, 'Shear out-of-plane prop. (G32)',
+    GraphInstance.defineLine( 3, 'Shear, out-of-plane propagation (G31)',
                               LIGHT_BLUE,
                               'dashed' )
 
@@ -87,7 +87,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     GraphInstance.GraphData[ 4 ].data = dict( XData = RangeX,
                                                YData = RangeY )
 
-    GraphInstance.defineLine( 4, 'Shear out-of-plane prop. (G31)',
+    GraphInstance.defineLine( 4, 'Shear, out-of-plane propagation (G32)',
                               LIGHT_BLUE,
                               'dashed' )
 
@@ -106,25 +106,24 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
                               'dashdot' )
 
 
-    # .......................... c_B_eff graph .................................
-    # 'Pure bending (thin plate)'
+    # ............................ c_B graph ...................................
+    # 'Effective bending (thick plate)'
     GraphInstance.GraphData[ 6 ].data = dict( XData = GraphInstance.getRange(),
-                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
+                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B" ] )
 
     GraphInstance.defineLine( 6, 'Pure bending (thin plate)',
                               GREEN,
-                              'solid' )
-
-
-    # ............................ c_B graph ...................................
-    # 'Effective bending (thick plate)'
-    GraphInstance.GraphData[ 7 ].data = dict( XData = GraphInstance.getRange(),
-                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B" ] )
-
-    GraphInstance.defineLine( 7, 'Effective bending (thick plate)',
-                              GREEN,
                               'dashed' )
 
+
+    # .......................... c_B_eff graph .................................
+    # 'Pure bending (thin plate)'
+    GraphInstance.GraphData[ 7 ].data = dict( XData = GraphInstance.getRange(),
+                                              YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
+
+    GraphInstance.defineLine( 7, 'Effective bending( thick plate)',
+                              GREEN,
+                              'solid' )
 
 
     # ............................ c_g graph ...................................
@@ -256,7 +255,7 @@ def plotWaveSpeedGraph( GraphInstance ):
         GraphInstance.GraphData[ 1 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
 
-        GraphInstance.defineLine( 1, 'Longitudinal out-of-plane',
+        GraphInstance.defineLine( 1, 'Longitudinal, out-of-plane',
                                   DARK_BLUE,
                                   'dashed' )
 
@@ -284,7 +283,7 @@ def plotWaveSpeedGraph( GraphInstance ):
         GraphInstance.GraphData[ 3 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
 
-        GraphInstance.defineLine( 3, 'Shear out-of-plane prop. (G32)',
+        GraphInstance.defineLine( 3, 'Shear, out-of-plane propagation (G31)',
                                   LIGHT_BLUE,
                                   'dashed' )
 
@@ -298,7 +297,7 @@ def plotWaveSpeedGraph( GraphInstance ):
         GraphInstance.GraphData[ 4 ].data = dict( XData = RangeX,
                                                   YData = RangeY )
 
-        GraphInstance.defineLine( 4, 'Shear out-of-plane prop. (G31)',
+        GraphInstance.defineLine( 4, 'Shear, out-of-plane propagation (G32)',
                                   LIGHT_BLUE,
                                   'dashed' )
 
@@ -317,24 +316,24 @@ def plotWaveSpeedGraph( GraphInstance ):
                                   'dashdot' )
 
 
-        # .......................... c_B_eff graph .................................
-        # 'Pure bending (thin plate)'
+        # ............................ c_B graph ...................................
+        # 'Effective bending (thick plate)'
         GraphInstance.GraphData[ 6 ].data = dict( XData = GraphInstance.getRange(),
-                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
+                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B" ] )
 
         GraphInstance.defineLine( 6, 'Pure bending (thin plate)',
                                   GREEN,
-                                  'solid' )
-
-
-        # ............................ c_B graph ...................................
-        # 'Effective bending (thick plate)'
-        GraphInstance.GraphData[ 7 ].data = dict( XData = GraphInstance.getRange(),
-                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B" ] )
-
-        GraphInstance.defineLine( 7, 'Effective bending (thick plate)',
-                                  GREEN,
                                   'dashed' )
+
+
+        # .......................... c_B_eff graph .................................
+        # 'Pure bending (thin plate)'
+        GraphInstance.GraphData[ 7 ].data = dict( XData = GraphInstance.getRange(),
+                                                  YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
+
+        GraphInstance.defineLine( 7, 'Effective bending( thick plate)',
+                                  GREEN,
+                                  'solid' )
 
 
         # ............................ c_g graph ...................................
@@ -483,7 +482,7 @@ def plotMaximumElementSize( GraphInstance ):
 
     GraphInstance.defineLine( 1, 'Effective Bending Wave Length',
                               GREEN,
-                              'dotdash' )
+                              'solid' )
 
 
     # ........................ ElementSize graph ...............................
