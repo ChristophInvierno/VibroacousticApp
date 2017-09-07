@@ -103,7 +103,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.defineLine( 5, 'Shear (corrected), out-of-plane displ.',
                               LIGHT_BLUE,
-                              'dotted' )
+                              'dashdot' )
 
 
     # .......................... c_B_eff graph .................................
@@ -113,7 +113,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.defineLine( 6, 'Pure bending (thin plate)',
                               GREEN,
-                              'dotdash' )
+                              'solid' )
 
 
     # ............................ c_B graph ...................................
@@ -144,7 +144,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     GraphInstance.defineLine( 9, 'Group (effective bending)',
                               ORANGE,
-                              'dotdash' )
+                              'solid' )
 
 
     # .................... fR_B graph .............................
@@ -314,7 +314,7 @@ def plotWaveSpeedGraph( GraphInstance ):
 
         GraphInstance.defineLine( 5, 'Shear (corrected), out-of-plane displ.',
                                   LIGHT_BLUE,
-                                  'dotted' )
+                                  'dashdot' )
 
 
         # .......................... c_B_eff graph .................................
@@ -324,7 +324,7 @@ def plotWaveSpeedGraph( GraphInstance ):
 
         GraphInstance.defineLine( 6, 'Pure bending (thin plate)',
                                   GREEN,
-                                  'dotdash' )
+                                  'solid' )
 
 
         # ............................ c_B graph ...................................
@@ -354,7 +354,7 @@ def plotWaveSpeedGraph( GraphInstance ):
 
         GraphInstance.defineLine( 9, 'Group (effective bending)',
                                   ORANGE,
-                                  'dotdash' )
+                                  'solid' )
 
 
 def plotModesInBand( GraphInstance ):
