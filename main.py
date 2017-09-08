@@ -265,7 +265,7 @@ def main( ):
 
 
     Info = Div( text = "*Thickness of top to center layer separated by "
-                       "comma, semicolon or space",
+                       "semicolon or space",
                 render_as_text = False,
                 width = 500,
                 height = 20 )
