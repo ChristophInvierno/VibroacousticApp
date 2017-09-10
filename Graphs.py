@@ -5,6 +5,7 @@ from Colors import *
 
 from bokeh.io import reset_output
 from bokeh.models import ColumnDataSource
+from bokeh.models.annotations import LegendItem
 from GraphClass import GraphObject
 
 
@@ -436,6 +437,17 @@ def plotModesInBand( GraphInstance ):
                               'solid' )
 
 
+    GraphInstance.Circles[ 0 ].data_source.data.update({"x" : GraphInstance.GraphData[ 0 ].data[ "XData" ],
+                                                        "y" : GraphInstance.GraphData[ 0 ].data[ "YData" ]})
+
+    GraphInstance.Graph.legend[ 0 ].items[ 0 ] = LegendItem( label = 'Effective bending (thick plate)',
+                                                             renderers = [ GraphInstance.Lines[ 0 ],
+                                                             GraphInstance.Circles[ 0 ] ] )
+
+    GraphInstance.Circles[ 0 ].glyph.line_color = GREEN
+    GraphInstance.Circles[ 0 ].glyph.fill_color = GREEN
+
+
     # ............................ compressional_np graph ......................
     # 'Shear, in-plane'
     GraphInstance.GraphData[ 1 ].data = dict( XData = GraphInstance.Containers[ "ModesInBand" ][ "freq_T" ],
@@ -445,15 +457,50 @@ def plotModesInBand( GraphInstance ):
                               LIGHT_BLUE,
                               'solid' )
 
+    GraphInstance.Circles[ 1 ].data_source.data.update({"x" : GraphInstance.GraphData[ 1 ].data[ "XData" ],
+                                                        "y" : GraphInstance.GraphData[ 1 ].data[ "YData" ]})
+
+
+
+    GraphInstance.Graph.legend[ 0 ].items[ 1 ] = LegendItem( label = 'Shear, in-plane',
+                                                             renderers = [ GraphInstance.Lines[ 1 ],
+                                                                           GraphInstance.Circles[ 1 ] ] )
+
+    GraphInstance.Circles[ 1 ].glyph.line_color = LIGHT_BLUE
+    GraphInstance.Circles[ 1 ].glyph.fill_color = LIGHT_BLUE
+
+
+
+
 
     # ............................ shear_np graph ..............................
     # 'Quasi-longitudial, in plane'
+
+
+
+
     GraphInstance.GraphData[ 2 ].data = dict( XData = GraphInstance.Containers[ "ModesInBand" ][ "freq_T" ],
                                               YData = GraphInstance.Containers[ "ModesInBand" ][ "compressional" ] )
 
     GraphInstance.defineLine( 2, 'Quasi-longitudial, in plane',
                               DARK_BLUE,
                               'solid' )
+
+
+
+    GraphInstance.Circles[ 2 ].data_source.data.update({"x" : GraphInstance.GraphData[ 2 ].data[ "XData" ],
+                                                        "y" : GraphInstance.GraphData[ 2 ].data[ "YData" ]})
+
+
+
+    GraphInstance.Graph.legend[ 0 ].items[ 2 ] = LegendItem( label = 'Quasi-longitudial, in plane',
+                                                             renderers = [ GraphInstance.Lines[ 2 ],
+                                                                           GraphInstance.Circles[ 2 ] ] )
+
+    GraphInstance.Circles[ 2 ].glyph.line_color = DARK_BLUE
+    GraphInstance.Circles[ 2 ].glyph.fill_color = DARK_BLUE
+
+
 
 
 def plotModalDensity( GraphInstance ):

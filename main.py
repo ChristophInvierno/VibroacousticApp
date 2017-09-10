@@ -379,6 +379,15 @@ def updateData( Tables, Graph, WarningMessage ):
             Tables[ "GeometryProperties" ].assignValue( 0, 2, HomogenizedData[ "TotalThickness" ] )
 
 
+        # Part of error handling.Function "isInputNegative" throws an error
+        # if there is an element with its negetive value.
+        isInputNegative( Tables [ "ElasticModulus" ].getData( ) )
+        isInputNegative( Tables [ "ShearModulus" ].getData( ) )
+        isInputNegative( Tables [ "PoissonRatios" ].getData( ) )
+        isInputNegative( Tables [ "MaterialProperties" ].getData( ) )
+        isInputNegative( Tables [ "GeometryProperties" ].getData( ) )
+
+        # update the tables buffers
         makeMask( Tables, Graph.getMode() )
 
         # before calling user-define functions check the current mode
@@ -395,14 +404,6 @@ def updateData( Tables, Graph, WarningMessage ):
 
 
     #################### CALL USER-SPECIFIC FAUNCTION ##########################
-
-        #WarningMessage.printMessage("Running")
-
-        isInputNegative( ElasticModulusData )
-        isInputNegative( ShearModulusData )
-        isInputNegative( PoissonRatiosData )
-        isInputNegative( MaterialPropertiesData )
-        isInputNegative( GeometryPropertiesData )
 
         testInputData( Graph.getMode(), PoissonRatiosData )
 
@@ -468,8 +469,10 @@ def updateData( Tables, Graph, WarningMessage ):
         WarningMessage.printMessage( str(Error) )
         Tables[ "GeometryProperties" ].setValue( 0, 2, LayerThicknessBuffer, "" )
 
+
     except WrongLayersThikness as Error:
         WarningMessage.printMessage( str(Error) )
+
 
     except TableCorrupted as Error:
         WarningMessage.printMessage( str(Error) )
