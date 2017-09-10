@@ -173,7 +173,7 @@ class InteractiveTable:
         if self.__ModeCounter[ aRow ][ aColumn ] == 0:
             #self.__ValueBuffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].value
             self.__TitelBuffer[aRow][aColumn] = self.__Widgets[aRow][aColumn].title
-            self.__Widgets[aRow][aColumn].title += "{}".format( Titel )
+            self.__Widgets[aRow][aColumn].title += "".format( Titel )
 
         self.__Widgets[ aRow ][ aColumn ].value = Value
         self.__ModeCounter[ aRow ][ aColumn ] += 1

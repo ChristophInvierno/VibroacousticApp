@@ -127,9 +127,6 @@ def wave_speeds( ElasticModulusData,
             # |
             c_L[ i, : ] = np.sqrt(
                 E1[ i ] / (rho[ i ] * (1 - nu21[ i ] ** 2)) )  # |
-
-            c_L_thick[ i, : ] = np.sqrt( E3[ i ]*( 1 - nu12[ i ] ) \
-                            / ( rho[ i ] * (1 - nu12[ i ] - 2 * nu21[ i ] ** 2)) )
             # |
             # |
             c_S[ i, : ] = np.sqrt( G[ i ] / rho[ i ] )  # |
@@ -341,8 +338,7 @@ def wave_speeds( ElasticModulusData,
                "f_thickmode_shear_x": f_thickmode_shear_x.tolist( )[ 0 ],
                "f_thickmode_shear_y": f_thickmode_shear_y.tolist( )[ 0 ],
                "fR_B": fR_B.tolist( )[ 0 ],
-               "fR_g": fR_g.tolist( )[ 0 ],
-               "f_thickmode_long": f_thickmode_long.tolist( )[ 0 ]}
+               "fR_g": fR_g.tolist( )[ 0 ] }
 
     return Result
 
