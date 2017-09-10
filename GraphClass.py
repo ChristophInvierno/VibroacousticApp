@@ -6,7 +6,7 @@ from bokeh.plotting import figure, reset_output
 from bokeh.models import Legend
 from copy import deepcopy
 from MessageClass import Message
-
+from bokeh.models.annotations import LegendItem
 
 class GraphCorrupted(Exception):
     pass
@@ -26,6 +26,7 @@ class GraphObject:
     # Private class variables
     IMAGE_COUNTER = 0;
     _MAX_NUMBER_OF_LINES = 15
+    _MAX_NUMBER_OF_DOTTED_LINES = 3
 
     def __init__( self, GraphNames, aRange, Width = 650, Height = 550 ):
 
@@ -80,7 +81,7 @@ class GraphObject:
 
         # Assign lines to the graph and generate the legend
         self.Lines = [ ]
-        LegendItems = [  ]
+        LegendItems = [ ]
         self.GraphData = [ ]
         for i in range( GraphObject._MAX_NUMBER_OF_LINES ):
 
@@ -94,6 +95,17 @@ class GraphObject:
                                                 source = self.GraphData[ i ] ) )
 
             LegendItems.append( ( "default", [ self.Lines[ i ] ] ) )
+
+
+        self.Circles = [ ]
+        for i in range( GraphObject._MAX_NUMBER_OF_DOTTED_LINES ):
+
+            self.Circles.append( self.Graph.circle( x = [ ],
+                                                    y = [ ],
+                                                    size = 3.0,
+                                                    line_color = "black",
+                                                    fill_color = "white",
+                                                    line_width = 3 ) )
 
         legend = Legend( items = LegendItems, location = (0, -30) )
         self.Graph.add_layout( legend, 'right' )
@@ -147,6 +159,15 @@ class GraphObject:
             self.GraphData[ i ].data = dict(XData = [], YData = [])
             self.Lines[ i ].glyph.line_color = 'white'
 
+
+        for i in range( GraphObject._MAX_NUMBER_OF_DOTTED_LINES ):
+
+            # remove circles from the graph
+            self.Circles[ i ].data_source.data.update( { "x": [],"y": [] } )
+
+            # adjust the legend of the top lines
+            self.Graph.legend[ 0 ].items[ i ] = LegendItem( label = "",
+                                                            renderers = [ self.Lines[ i ] ] )
 
     def defineLine(self, ID ,Name, Color, Style):
         '''

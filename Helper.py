@@ -44,6 +44,29 @@ def testInputData( Mode, Nu):
         pass
 
 
+def isInputNegative( Input ):
+
+    nColumns = 0
+    nRows = 0
+    if type(Input[ 0 ]) == list:
+
+        nColumns = len( Input[ 0 ] )
+        nRows = len( Input )
+
+        for i in xrange( nRows ):
+            for j in xrange( nColumns ):
+                if Input[ i ][ j ] < 0:
+                    raise DataCorrupted("the material properties are not feasible" )
+
+    else:
+
+        for i in xrange( len( Input ) ):
+
+            if Input[ i ] < 0:
+                raise DataCorrupted("the material properties are not feasible" )
+
+
+
 class WrongLayersThikness(Exception):
     pass
 
