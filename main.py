@@ -81,8 +81,8 @@ def main( ):
 
     ElasticModulus.setTitels( [ [ EMODUL_X, EMODUL_Y, EMODUL_Z ] ] )
 
-    IsotropicData = [ [ "1.061e10", "1.061e10", "1.061e10" ] ]
-    OrthotropicData = [ [ "1.061e10", "7.605e08", "3.667e08" ] ]
+    OrthotropicData = [ [ "1.10E+10", "3.67E+08", "3.67E+08" ] ]
+    IsotropicData = [ [ "1.10E+10", "1.10E+10", "1.10E+10" ] ]
     ElasticModulus.setValues( OrthotropicData )
     ElasticModulus.addBuffer( BufferName =  "DefaultIsotropic",
                               BufferData = IsotropicData )
@@ -108,8 +108,8 @@ def main( ):
                                      Columns =  3 )
 
     ShearModulus.setTitels( [ [ EMODUL_XY, EMODUL_XZ, EMODUL_YZ ] ] )
-    OrthotropicData = [ [ "6.900e08", "1.725e08", "9.857e07" ] ]
-    IsotropicData = [ [ "6.900e08", "6.900e08", "6.900e08" ] ]
+    OrthotropicData = [ [ "6.90E+08", "6.90E+07", "6.90E+08" ] ]
+    IsotropicData = [ [ "6.90E+08", "6.90E+08", "6.90E+08" ] ]
 
     ShearModulus.setValues( OrthotropicData )
 
@@ -142,11 +142,11 @@ def main( ):
                                  POISSON_RATIO_ZX + "\t( auto )",
                                  POISSON_RATIO_ZY + "\t( auto )" ] ] )
 
-    DataIsotropic = [ [ "0.3", "0.3", "0.3" ],
-                      [ "0.3", "0.3", "0.3" ] ]
+    DataIsotropic = [ [ "0.42", "0.42", "0.42" ],
+                      [ "0.42", "0.42", "0.42" ] ]
 
-    DataOrthotropic = [ [ "1.184", "1.771", "0.382" ],
-                        [ "0.085", "0.061", "0.184" ] ]
+    DataOrthotropic = [ [ "0.42", "0.42", "0.3" ],
+                        [ "0.014", "0.014", "0.3" ] ]
 
     PoissonRatios.setValues( DataOrthotropic )
 
@@ -199,7 +199,7 @@ def main( ):
 
     GeometryProperties.setTitels( [ [ "Length", "Width", "Thickness of the layers*" ] ] )
 
-    Data = [ [ "2.5", "3.0", "0.081" ] ]
+    Data = [ [ "2.5", "3.0", "0.135" ] ]
     GeometryProperties.setValues( Data )
 
     GeometryProperties.setValues( Data )
@@ -384,7 +384,6 @@ def updateData( Tables, Graph, WarningMessage ):
         # before calling user-define functions check the current mode
         cangeMode( Tables, WarningMessage, Graph.getMode() )
 
-
         precomputePoissonRatios( Tables )
 
         # get data from the corresponding tables
@@ -399,7 +398,14 @@ def updateData( Tables, Graph, WarningMessage ):
 
         #WarningMessage.printMessage("Running")
 
+        isInputNegative( ElasticModulusData )
+        isInputNegative( ShearModulusData )
+        isInputNegative( PoissonRatiosData )
+        isInputNegative( MaterialPropertiesData )
+        isInputNegative( GeometryPropertiesData )
+
         testInputData( Graph.getMode(), PoissonRatiosData )
+
 
         Graph.Containers[ "WaveVelocity" ] = wave_speeds(
                                                 ElasticModulusData,
@@ -538,11 +544,11 @@ def cangeMode( Tables, WarningMessage, Mode ):
         Tables[ "ElasticModulus" ].setValue( 0, 1, UniformValue )
         Tables[ "ElasticModulus" ].setValue( 0, 2, UniformValue )
 
-        UniformValue = str( Tables[ "ElasticModulus" ].getFloatValue( 0, 0 ) \
-                            / ( 2.0 * ( 1.0 + Tables[ "PoissonRatios" ].getFloatValue( 0, 0 ))) )
-        Tables[ "ShearModulus" ].setValue( 0, 0, UniformValue )
-        Tables[ "ShearModulus" ].setValue( 0, 1, UniformValue )
-        Tables[ "ShearModulus" ].setValue( 0, 2, UniformValue )
+        UniformValue = Tables[ "ElasticModulus" ].getFloatValue( 0, 0 ) \
+                            / ( 2.0 * ( 1.0 + Tables[ "PoissonRatios" ].getFloatValue( 0, 0 )))
+        Tables[ "ShearModulus" ].setValue( 0, 0, '{:.2e}'.format( UniformValue ) )
+        Tables[ "ShearModulus" ].setValue( 0, 1, '{:.2e}'.format( UniformValue ) )
+        Tables[ "ShearModulus" ].setValue( 0, 2, '{:.2e}'.format( UniformValue )  )
 
         UniformValue = Tables[ "PoissonRatios" ].getValue( 0, 0 )
         Tables[ "PoissonRatios" ].setValue( 0, 1, UniformValue )
@@ -556,7 +562,7 @@ def cangeMode( Tables, WarningMessage, Mode ):
 
 
     if ( Mode == 0 ):
-        """
+
         Tables[ "ElasticModulus" ].restoreValue( 0, 1 )
         Tables[ "ElasticModulus" ].restoreValue( 0, 2 )
 
@@ -566,7 +572,7 @@ def cangeMode( Tables, WarningMessage, Mode ):
 
         Tables[ "PoissonRatios" ].restoreValue( 0, 1 )
         Tables[ "PoissonRatios" ].restoreValue( 0, 2 )
-        """
+
         pass
     precomputePoissonRatios( Tables )
 

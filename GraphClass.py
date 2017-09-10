@@ -6,7 +6,7 @@ from bokeh.plotting import figure, reset_output
 from bokeh.models import Legend
 from copy import deepcopy
 from MessageClass import Message
-
+from bokeh.models.annotations import LegendItem
 
 class GraphCorrupted(Exception):
     pass
@@ -146,6 +146,9 @@ class GraphObject:
             self.Graph.legend[ 0 ].items[ i ].label[ 'value' ] = ""
             self.GraphData[ i ].data = dict(XData = [], YData = [])
             self.Lines[ i ].glyph.line_color = 'white'
+
+            #self.Graph.legend[ 0 ].items[ i ] = \
+            #            LegendItem( label = "", renderers = [ self.Lines[ i ] ] )
 
 
     def defineLine(self, ID ,Name, Color, Style):
