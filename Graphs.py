@@ -35,17 +35,17 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     GraphInstance.GraphData[ COUNTER ].data = dict( XData = RangeX,
                                               YData = RangeY )
 
-    if GraphInstance.getMode() == 0:
+    #if GraphInstance.getMode() == 0:
 
-        GraphInstance.defineLine( COUNTER, 'Quasi-longitudial, in-plane',
+    GraphInstance.defineLine( COUNTER, 'Quasi-longitudial, in-plane',
                                   DARK_BLUE,
                                   'solid' )
 
-    elif GraphInstance.getMode() == 1:
+    #elif GraphInstance.getMode() == 1:
 
-        GraphInstance.defineLine( COUNTER, 'Quasi-longitudial',
-                                  DARK_BLUE,
-                                  'solid' )
+    #    GraphInstance.defineLine( COUNTER, 'Quasi-longitudial',
+    #                              DARK_BLUE,
+    #                              'solid' )
 
     COUNTER += 1
 
@@ -147,7 +147,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
     GraphInstance.GraphData[ COUNTER ].data = dict( XData = GraphInstance.getRange(),
                                               YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
 
-    GraphInstance.defineLine( COUNTER, 'Effective bending( thick plate)',
+    GraphInstance.defineLine( COUNTER, 'Effective bending (thick plate)',
                               GREEN,
                               'solid' )
 
@@ -218,7 +218,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
         COUNTER += 1
 
-    # .................... f_thickmode_shear graph .............................
+    # .................... f_thickmode_shear_x graph .............................
     # '1st Thickness-shear resonance (G31)'
     RangeX = [ GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear_x" ],
                GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_shear_x" ] ]
@@ -241,7 +241,7 @@ def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
     COUNTER += 1
 
-    # ................... f_thickmode_shear_x graph ............................
+    # ................... f_thickmode_stretch graph ............................
     # '1st Thickness-stretch resonance'
     RangeX = [ GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_long" ],
                GraphInstance.Containers[ "WaveVelocity" ][ "f_thickmode_long" ] ]
@@ -381,7 +381,7 @@ def plotWaveSpeedGraph( GraphInstance ):
 
         COUNTER += 1
         # ............................ c_B graph ...................................
-        # 'Effective bending (thick plate)'
+        # 'Pure bending (thin plate)'
         GraphInstance.GraphData[ COUNTER ].data = dict( XData = GraphInstance.getRange(),
                                                   YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B" ] )
 
@@ -391,11 +391,11 @@ def plotWaveSpeedGraph( GraphInstance ):
 
         COUNTER += 1
         # .......................... c_B_eff graph .................................
-        # 'Pure bending (thin plate)'
+        # 'Effective bending (thick plate)'
         GraphInstance.GraphData[ COUNTER ].data = dict( XData = GraphInstance.getRange(),
                                                   YData = GraphInstance.Containers[ "WaveVelocity" ][ "c_B_eff" ] )
 
-        GraphInstance.defineLine( COUNTER, 'Effective bending( thick plate)',
+        GraphInstance.defineLine( COUNTER, 'Effective bending (thick plate)',
                                   GREEN,
                                   'solid' )
 

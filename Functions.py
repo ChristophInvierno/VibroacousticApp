@@ -50,7 +50,7 @@ def wave_speeds( ElasticModulusData,
     c_B_shear = np.zeros( (Subs, freq.size) )
     c_g = np.zeros( (Subs, freq.size) )
     c_g_eff = np.zeros( (Subs, freq.size) )
-    c_g_eff = np.zeros( (Subs, freq.size) )
+    #c_g_eff = np.zeros( (Subs, freq.size) )
     c_S = np.zeros( (Subs, freq.size) )
     c_S_outofplane = np.zeros( (Subs, freq.size) )
     c_S_outofplane_1 = np.zeros( (Subs, freq.size) )
@@ -93,6 +93,7 @@ def wave_speeds( ElasticModulusData,
         # allocate numpy arrays
         c_B = np.zeros( (Subs, freq.size) )
         c_L = np.zeros( (Subs, freq.size) )
+		#c_L_thick = np.zeros( (Subs, freq.size) )
         c_S = np.zeros( (Subs, freq.size) )
         c_g = np.zeros( (Subs, freq.size) )
         c_B_shear = np.zeros( (Subs, freq.size) )
@@ -128,7 +129,7 @@ def wave_speeds( ElasticModulusData,
             c_L[ i, : ] = np.sqrt(
                 E1[ i ] / (rho[ i ] * (1 - nu21[ i ] ** 2)) )  # |
 
-            c_L_thick[ i, : ] = np.sqrt( E3[ i ]*( 1 - nu12[ i ] ) \
+            c_L_thick[ i, : ] = np.sqrt( E3[ i ]*( 1 - nu12[ i ] ) #\
                             / ( rho[ i ] * (1 - nu12[ i ] - 2 * nu21[ i ] ** 2)) )
             # |
             # |
@@ -139,8 +140,8 @@ def wave_speeds( ElasticModulusData,
             # tw,01.02.17
 
             # rayleighwellengeschwindigkeit nach Moeser et al 2010
-            c_B_shear[ i, : ] = 1 * c_B_shear[ i,
-                                    : ]  # Abschaetzung Rayleighgeschwindigkeit
+            #c_B_shear[ i, : ] = 1 * c_B_shear[ i,
+            #                        : ]  # Abschaetzung Rayleighgeschwindigkeit
 
             fR_B[ i ] = c_B_shear[ i, 0 ] ** 2 / (2 * math.pi) * np.sqrt(
                 (rho[ i ] * d[ i ]) / B[ i ] )  # Grenzfrequenz nach Meier 2000
@@ -157,7 +158,7 @@ def wave_speeds( ElasticModulusData,
             2 * fR_B[
                 i ] / freq) ** 2 )  # korrigierte Biegegruppenwellengeschwindigkeit
 
-            f_thickmode_long[ i ] = c_L[ i, 0 ] / (2 * d[ i ])
+            f_thickmode_long[ i ] = c_L_thick[ i, 0 ] / (2 * d[ i ])
             f_thickmode_shear[ i ] = c_S[ i, 0 ] / (2 * d[ i ])
             f_thickmode_shear_x[ i ] = f_thickmode_shear[ i ]
             f_thickmode_shear_y[ i ] = f_thickmode_shear[ i ]
@@ -177,11 +178,7 @@ def wave_speeds( ElasticModulusData,
         c_S_outofplane = np.zeros( (Subs, freq.size) )
         c_S_outofplane_1 = np.zeros( (Subs, freq.size) )
         c_S_outofplane_2 = np.zeros( (Subs, freq.size) )
-        # c_S = np.zeros((Subs, freq.size))
-        # c_S_outofplane_1 = np.zeros((Subs, freq.size))
-        # c_S_outofplane_2 = np.zeros((Subs, freq.size))
 
-        # c_B_shear = np.zeros((Subs, freq.size))
         c_B_shear = np.zeros( (Subs, freq.size) )
         c_B_shear_1 = np.zeros( (Subs, freq.size) )
         c_B_shear_2 = np.zeros( (Subs, freq.size) )

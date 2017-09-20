@@ -108,7 +108,7 @@ def main( ):
                                      Columns =  3 )
 
     ShearModulus.setTitels( [ [ EMODUL_XY, EMODUL_XZ, EMODUL_YZ ] ] )
-    OrthotropicData = [ [ "6.90E+08", "6.90E+07", "6.90E+08" ] ]
+    OrthotropicData = [ [ "6.90E+08", "6.90E+08", "6.90E+07" ] ]
     IsotropicData = [ [ "6.90E+08", "6.90E+08", "6.90E+08" ] ]
 
     ShearModulus.setValues( OrthotropicData )
@@ -199,7 +199,7 @@ def main( ):
 
     GeometryProperties.setTitels( [ [ "Length", "Width", "Thickness of the layers*" ] ] )
 
-    Data = [ [ "2.5", "3.0", "0.135" ] ]
+    Data = [ [ "2.5", "3.0", "0.027" ] ]
     GeometryProperties.setValues( Data )
 
     GeometryProperties.setValues( Data )
