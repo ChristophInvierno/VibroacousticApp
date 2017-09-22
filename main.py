@@ -265,7 +265,8 @@ def main( ):
 
 
     Info = Div( text = "*Thickness of top to center layer separated by "
-                       "semicolon or space",
+                       "semicolon or space "
+					   "(symmetric cross section with odd number of layers and crosswise layup assumed)",
                 render_as_text = False,
                 width = 500,
                 height = 20 )
