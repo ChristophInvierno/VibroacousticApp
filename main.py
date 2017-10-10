@@ -524,6 +524,9 @@ def updateGraph( Graph, GraphNumber ):
     if (GraphNumber == 5):
         plotMaximumElementSize( Graph )
 
+    if (GraphNumber == 6):
+        plotScheme( Graph )
+
 
 def updateMode( Tables,
                 WarningMessage,

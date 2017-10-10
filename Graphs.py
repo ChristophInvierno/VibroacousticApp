@@ -646,3 +646,10 @@ def plotEigenfrequenciesPlate( GraphInstance ):
 
     #GraphInstance.updateTestGraph( "Eigenfrequencies", Counter )
     '''
+
+
+def plotScheme( GraphInstance ):
+    print "hello"
+    GraphInstance.Graph.image_url(url=['./static/images/scheme.png'], x=0, y=550,
+                                                                      w=550, h=550)
+    pass
