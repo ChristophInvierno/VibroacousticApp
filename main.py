@@ -1,26 +1,13 @@
 # Link bokeh libraries
-from bokeh.plotting import figure
-from bokeh.layouts import column, row, Spacer
 from bokeh.io import curdoc, show, set_curdoc
 from bokeh.models import Div, Label, Plot, ColumnDataSource
-from bokeh.plotting import figure, output_file, show
-from bokeh.models.glyphs import Text
 from bokeh.models.widgets import Button, RadioButtonGroup, Select, Slider
-from bokeh.models.widgets import TextInput, AutocompleteInput
 from bokeh.plotting import figure
 
-
 # Link third-party python libraries
-from math import cos, sin, radians, sqrt, pi, atan2
 from functools import partial
-import matplotlib.pyplot as plt
-import threading
-from multiprocessing import Process
-import time
 
 # Link custom files
-
-from LatexSupport import LatexLabel
 from UnicodeSymbols import *
 from Helper import *
 from Graphs import *
@@ -29,7 +16,6 @@ from MessageClass import Message
 from Functions import *
 from Homogenization import *
 
-# TODO: change the name of the module
 from InteractiveTable import *
 
 

@@ -1,10 +1,6 @@
-from bokeh.layouts import widgetbox
 from bokeh.models.widgets import TextInput
 from bokeh.layouts import column, row, Spacer
-from copy import deepcopy
-
 import numpy as np
-from copy import deepcopy
 
 
 class TableCorrupted(Exception):

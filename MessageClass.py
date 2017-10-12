@@ -38,7 +38,7 @@ class Message:
 
     def clean(self):
         """
-        The function erases the message and update the widget (instance)
+        The function erases the message and updates the widget (instance)
         :return:
         """
         self.Text = ''

@@ -1,12 +1,5 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import random
 from Colors import *
-
-from bokeh.io import reset_output
-from bokeh.models import ColumnDataSource
 from bokeh.models.annotations import LegendItem
-from GraphClass import GraphObject
 
 
 def plotWaveSpeedGraphWithLimits( GraphInstance ):
