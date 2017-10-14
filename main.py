@@ -45,8 +45,7 @@ def main( ):
                            "Modes in Band",
                            "Modal Density",
                            "Modal Overlap Factor",
-                           "Maximum Element Size (FEM)",
-                           "Scheme"],
+                           "Maximum Element Size (FEM)"],
                             FrequencyRange,
                             Width = 850,
                             Height = 550)
@@ -271,7 +270,8 @@ def main( ):
                 height = 30 )
 
 
-    Scheme = Div( text = "<img src='static/images/scheme.png'>",
+    Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
+                         "<img src='/VibroacousticApp/static/images/scheme.png'>",
                 width = 550,
                 height = 550 )
 
@@ -299,11 +299,11 @@ def main( ):
                         GeometryProperties.Table,
                         LayersInfo.Widget,
                         Info,
-                        WarningMessage.Widget,
+                        Spacer( height = 30 ),
                         Scheme)
 
 
-    RightSide = column( Graph.Widget , Buttons )
+    RightSide = column( Graph.Widget , Buttons,WarningMessage.Widget )
 
 
     # ========================= COMMUNICATION PART =============================
