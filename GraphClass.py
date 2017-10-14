@@ -6,6 +6,7 @@ from bokeh.models import Legend
 from copy import deepcopy
 from MessageClass import Message
 from bokeh.models.annotations import LegendItem
+from bokeh.models.glyphs import ImageURL
 
 class GraphCorrupted(Exception):
     pass
@@ -136,12 +137,10 @@ class GraphObject:
         self.Graph.add_layout( legend, 'right' )
 
 
-
         # Create one common widget that is going to represent the entire class
         self.Widget = row( column( self.GraphRadioButtons,
                                    self.Graph,
                                    self.TextWidget.Widget ) )
-
 
 
     # SETTERS

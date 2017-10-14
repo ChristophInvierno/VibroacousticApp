@@ -704,6 +704,10 @@ def plotEigenfrequenciesPlate( GraphInstance ):
     GraphInstance.TextWidget.printMessage( Text )
 
 
+import numpy as np
+from bokeh.plotting import figure, show
+from bokeh.models.glyphs import ImageURL
+from bokeh.models import ColumnDataSource
 def plotScheme( GraphInstance ):
     """
      At the beginning the function cleans the GraphInstance from the previous plot. Then
@@ -711,7 +715,6 @@ def plotScheme( GraphInstance ):
     :param GraphInstance: an instance of GraphObject class
     :return:
     """
-    print "hello"
-    GraphInstance.Graph.image_url(url=['./static/images/scheme.png'], x=0, y=550,
-                                                                      w=550, h=550)
+    #print "hello"
     pass
+

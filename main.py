@@ -125,6 +125,7 @@ def main( ):
     PoissonRatios = InteractiveTable( TableName = "POISSON'S RATIOS",
                                       Rows = 2,
                                       Columns = 3 )
+
     PoissonRatios.setTitels( [ [ POISSON_RATIO_XY,
                                  POISSON_RATIO_XZ,
                                  POISSON_RATIO_YZ ],
@@ -161,6 +162,7 @@ def main( ):
     MaterialProperties = InteractiveTable( TableName = "MATERIAL PROPERTIES",
                                            Rows = 1,
                                            Columns = 2 )
+
     MaterialProperties.setTitels( [ [ "Density", "Loss Factor" ] ] )
 
     Data = [ [ "450.0", "0.012" ] ]
@@ -251,8 +253,8 @@ def main( ):
 
 
     LayersInfo = Message( Color = "black",
-                              Size = 2,
-                              MessageHeader = "Number of layers: " )
+                          Size = 2,
+                          MessageHeader = "Number of layers: " )
 
 
     WarningMessage = Message( Color = "grey",
@@ -268,6 +270,10 @@ def main( ):
                 width = 500,
                 height = 30 )
 
+
+    Scheme = Div( text = "<img src='static/images/scheme.png'>",
+                width = 550,
+                height = 550 )
 
     # SPECIFY THE LAYOUT:
     Buttons = row( row( Spacer( width = 50 ),
@@ -293,7 +299,8 @@ def main( ):
                         GeometryProperties.Table,
                         LayersInfo.Widget,
                         Info,
-                        WarningMessage.Widget )
+                        WarningMessage.Widget,
+                        Scheme)
 
 
     RightSide = column( Graph.Widget , Buttons )
@@ -513,7 +520,6 @@ def updateGraph( Graph, GraphNumber ):
     Graph.setPlottingGraphNumber( GraphNumber )
 
     plotEigenfrequenciesPlate( Graph )
-
 
     # Depict coresponding lines based on the graph chosen by the user
     if (GraphNumber == 0):
