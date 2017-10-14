@@ -15,15 +15,19 @@ from GraphClass import GraphObject
 from MessageClass import Message
 from Functions import *
 from Homogenization import *
-
 from InteractiveTable import *
 
 
 def main( ):
+    """
+    The main function only describes both graphical and comunication parts of the app.
+    It creates and initialize all necessary widgets. At the end the function calls
+    doc.add_root to display the object on a browser
+    :return:
+    """
+
     # Quasi constant
     FrequencyRange = np.logspace( 0, 5, 1000 )
-    # the main function only describes both graphical and comunication
-    # of the app.
     doc = curdoc()
 
     # ========================== GRAPHICAL PART ================================
@@ -263,6 +267,7 @@ def main( ):
                 render_as_text = False,
                 width = 500,
                 height = 30 )
+
 
     # SPECIFY THE LAYOUT:
     Buttons = row( row( Spacer( width = 50 ),

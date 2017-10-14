@@ -251,7 +251,7 @@ class GraphObject:
     def defineContainers(self, Keys = None):
         """
         The function defines the possible containers that the class can carry. Whenever
-        the user compute something based on frequency (range) he/she can store the result
+        the user computes something based on frequency (range) he/she can store the result
         in the corresponding container. It means that the user doesn't have to carry the
         computed data from one function to another. He/she can simply put the data to
         a container and then only pass the current instance of the class within
