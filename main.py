@@ -1,5 +1,5 @@
 # Link bokeh libraries
-from bokeh.io import curdoc, show, set_curdoc
+from bokeh.io import curdoc, show
 from bokeh.models import Div, Label, Plot, ColumnDataSource
 from bokeh.models.widgets import Button, RadioButtonGroup, Select, Slider
 from bokeh.plotting import figure
@@ -499,11 +499,11 @@ def updateData( Tables, Graph, LayersInfo, WarningMessage ):
     except TableCorrupted as Error:
         WarningMessage.printMessage( str(Error) )
 
-
+    '''
     except:
         Message = "Error: Unexpected error. Please, refer to the code"
         WarningMessage.printMessage( Message )
-
+    '''
 
 def updateGraph( Graph, GraphNumber ):
     """
