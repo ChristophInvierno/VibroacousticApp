@@ -275,21 +275,21 @@ def main( ):
     #            height = 550 )
     
     Description = Div( text = "The handling of the application can be classified in three steps: <br><br>"
-                "1. Inserting of physical properties of a homogenous plate or of a single layer"
-                "&nbsp;on the left (default values are given) and pressing 'Apply'. <br><br>"
-                "2. In the case of a layered plate, the material properties are"
+                "<b>1.</b> Inserting of physical properties of a homogenous plate or of a single layer"
+                "&nbsp;on the left (default values are given) and pressing <i>'Apply'</i>. <br><br>"
+                "<b>2.</b> In the case of a layered plate, the material properties are"
                 "homogenized through the thickness. Thus, the input data of the single layer"
-                "is overwritten by homogenized material parameters of the plate after pressing 'Apply'."
+                "is overwritten by homogenized material parameters of the plate after pressing <i>'Apply'</i>."
                 "&nbsp;The input data of the single layer can be checked by pressing the "
-                "&nbsp;button 'Show Input'. <br><br>"
-                "3. On the right, the various results listed above can be studied"
+                "&nbsp;button <i>'Show Input'</i>. <br><br>"
+                "<b>3.</b> On the right, the various results listed above can be studied"
                 "&nbsp;using e.g. the zoom function and saved as .png."
 					   ,
                 render_as_text = False,
                 width = 1200,
                 height = 30 )
     
-    Title = Div ( text = "VIBROACOUSTIC OF PLATES",
+    Title = Div ( text = "<b><h1> VIBROACOUSTIC OF PLATES</b><h1>",
                  render_as_text = False,
                  width = 1200,
                  height = 30)
