@@ -269,10 +269,30 @@ def main( ):
                 height = 30 )
 
 
-    Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
-                         "<img src='/VibroacousticApp/static/images/scheme.png'>",
-                width = 550,
-                height = 550 )
+    #Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
+    #                    "<img src='/VibroacousticApp/static/images/scheme.png'>",
+    #            width = 550,
+    #            height = 550 )
+    
+    Description = Div( text = "The handling of the application can be classified in three steps: <br><br>"
+                "1. Inserting of physical properties of a homogenous plate or of a single layer"
+                "&nbsp;on the left (default values are given) and pressing 'Apply'. <br><br>"
+                "2. In the case of a layered plate, the material properties are"
+                "homogenized through the thickness. Thus, the input data of the single layer"
+                "is overwritten by homogenized material parameters of the plate after pressing 'Apply'."
+                "&nbsp;The input data of the single layer can be checked by pressing the "
+                "&nbsp;button 'Show Input'. <br><br>"
+                "3. On the right, the various results listed above can be studied"
+                "&nbsp;using e.g. the zoom function and saved as .png."
+					   ,
+                render_as_text = False,
+                width = 1200,
+                height = 30 )
+    
+    Title = Div ( text = "VIBROACOUSTIC OF PLATES",
+                 render_as_text = False,
+                 width = 1200,
+                 height = 30)
 
     # SPECIFY THE LAYOUT:
     Buttons = row( row( Spacer( width = 50 ),
@@ -284,8 +304,10 @@ def main( ):
                         Spacer( width = 50 ),
                         PrintReport ) )
 
-
-    LeftSide = column( ModeRadioButtons,
+    Headline = column( Title,
+                       Description)
+    
+    LeftSide = column(  ModeRadioButtons,
                         ELASTIC_MODULUS_TITEL,
                         ElasticModulus.Table,
                         SHEAR_MODULUS_TITEL,
@@ -298,8 +320,8 @@ def main( ):
                         GeometryProperties.Table,
                         LayersInfo.Widget,
                         Info,
-                        Spacer( height = 30 ),
-                        Scheme)
+                        Spacer( height = 20 ))
+                        #Scheme)
 
 
     RightSide = column( Graph.Widget , Buttons,WarningMessage.Widget )
@@ -346,6 +368,7 @@ def main( ):
 
 
     # RUN ALL WIDJETS
+    doc.add_root(Headline)
     doc.add_root( column( Spacer( height = 20 ),
                       row( LeftSide,
                            Spacer( width = 50 ),
