@@ -715,6 +715,12 @@ def plotScheme( GraphInstance ):
     :param GraphInstance: an instance of GraphObject class
     :return:
     """
+    GraphInstance.cleanGraph( )
+    Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
+                        "<img src='/VibroacousticApp/static/images/scheme.png'>",
+                width = 550,
+                height = 550 )
+
     #print "hello"
     pass
 

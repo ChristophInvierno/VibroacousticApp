@@ -45,7 +45,8 @@ def main( ):
                            "Modes in Band",
                            "Modal Density",
                            "Modal Overlap Factor",
-                           "Maximum Element Size (FEM)"],
+                           "Maximum Element Size (FEM)",
+                           "Scheme"],
                             FrequencyRange,
                             Width = 850,
                             Height = 550)
@@ -57,7 +58,8 @@ def main( ):
                             "ModalDensity",
                             "ModalOverlapFactor",
                             "MaxElementSize"
-                            "EigenFrequency"])
+                            "EigenFrequency"
+                            "Scheme"])
 
 
 
@@ -139,6 +141,7 @@ def main( ):
                         [ "0.014", "0.014", "0.3" ] ]
 
     PoissonRatios.setValues( DataOrthotropic )
+
 
     PoissonRatios.addBuffer( BufferName = "DefaultIsotropic",
                              BufferData = DataIsotropic )
