@@ -716,10 +716,15 @@ def plotScheme( GraphInstance ):
     :return:
     """
     GraphInstance.cleanGraph( )
+    GraphInstance.Graph.yaxis.axis_label = ""
+    GraphInstance.Graph.xaxis.axis_label = ""
+    
     Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
                         "<img src='/VibroacousticApp/static/images/scheme.png'>",
                 width = 550,
                 height = 550 )
+
+    plot.add_glyph(Scheme)
 
     #print "hello"
     pass

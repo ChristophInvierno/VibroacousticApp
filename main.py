@@ -17,6 +17,10 @@ from Functions import *
 from Homogenization import *
 from InteractiveTable import *
 
+        
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
 
 def main( ):
     """
@@ -273,9 +277,9 @@ def main( ):
 
 
     #Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
-    #                    "<img src='/VibroacousticApp/static/images/scheme.png'>",
-    #            width = 550,
-    #            height = 550 )
+     #                  "<img src='/VibroacousticApp/static/images/scheme.png'>",
+     #           width = 550,
+     #           height = 550 )
     
     Description = Div( text = "The handling of the application can be classified in three steps: <br><br>"
                 "<b>1.</b> Inserting of physical properties of a homogenous plate or of a single layer"
@@ -327,7 +331,8 @@ def main( ):
                         #Scheme)
 
 
-    RightSide = column( Graph.Widget , Buttons,WarningMessage.Widget )
+    RightSide = column( Graph.Widget , Buttons,WarningMessage.Widget,
+                        Spacer( height = 40 ) )
 
 
     # ========================= COMMUNICATION PART =============================
@@ -370,7 +375,7 @@ def main( ):
     updateData( Tables, Graph, LayersInfo, WarningMessage )
 
 
-    # RUN ALL WIDJETS
+    # RUN ALL WIDGETS
     doc.add_root(Headline)
     doc.add_root( column( Spacer( height = 20 ),
                       row( LeftSide,
@@ -506,6 +511,10 @@ def updateData( Tables, Graph, LayersInfo, WarningMessage ):
                                                       GeometryPropertiesData,
                                                       bool( Graph.getMode() ),
                                                       Graph.getRange() )
+        Graph.Containers["Scheme"] = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
+                        "<img src='/VibroacousticApp/static/images/scheme.png'>",
+                width = 550,
+                height = 550 )
 
         # Update the current graph with new data
         updateGraph( Graph, Graph.getCurrentGraphNumber( ) )
@@ -566,8 +575,15 @@ def updateGraph( Graph, GraphNumber ):
         plotMaximumElementSize( Graph )
 
     if (GraphNumber == 6):
-        plotScheme( Graph )
+        Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
+                        "<img src='/VibroacousticApp/static/images/scheme.png'>",
+                width = 550,
+                height = 550 )
 
+        #Scheme = mpimg.imread("C:\Users\carme\Documents\GitHub\VibroacousticApp\static\images\scheme.png")
+        #plt.imshow(Scheme)
+        #plt.show()
+        show(Scheme)
 
 def updateMode( Tables,
                 WarningMessage,
