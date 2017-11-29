@@ -17,9 +17,6 @@ from Functions import *
 from Homogenization import *
 from InteractiveTable import *
 
-        
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 
 
 def main( ):
@@ -49,8 +46,7 @@ def main( ):
                            "Modes in Band",
                            "Modal Density",
                            "Modal Overlap Factor",
-                           "Maximum Element Size (FEM)",
-                           "Scheme"],
+                           "Maximum Element Size (FEM)"],
                             FrequencyRange,
                             Width = 850,
                             Height = 550)
@@ -61,9 +57,9 @@ def main( ):
                             "ModesInBand",
                             "ModalDensity",
                             "ModalOverlapFactor",
-                            "MaxElementSize"
-                            "EigenFrequency"
-                            "Scheme"])
+                            "MaxElementSize",
+                            "EigenFrequency",
+                            ])
 
 
 
@@ -575,15 +571,12 @@ def updateGraph( Graph, GraphNumber ):
         plotMaximumElementSize( Graph )
 
     if (GraphNumber == 6):
-        Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
-                        "<img src='/VibroacousticApp/static/images/scheme.png'>",
-                width = 550,
-                height = 550 )
+        plotScheme ( Graph )
+        #Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
+        #                "<img src='/VibroacousticApp/static/images/scheme.png'>",
+        #        width = 550,
+        #        height = 550 )
 
-        #Scheme = mpimg.imread("C:\Users\carme\Documents\GitHub\VibroacousticApp\static\images\scheme.png")
-        #plt.imshow(Scheme)
-        #plt.show()
-        show(Scheme)
 
 def updateMode( Tables,
                 WarningMessage,

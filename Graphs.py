@@ -1,6 +1,10 @@
 from Colors import *
 from bokeh.models.annotations import LegendItem
-
+import numpy as np
+from bokeh.plotting import figure
+from bokeh.models.glyphs import ImageURL
+from bokeh.models import ColumnDataSource
+from scipy.misc import imread
 
 def plotWaveSpeedGraphWithLimits( GraphInstance ):
 
@@ -704,10 +708,7 @@ def plotEigenfrequenciesPlate( GraphInstance ):
     GraphInstance.TextWidget.printMessage( Text )
 
 
-import numpy as np
-from bokeh.plotting import figure, show
-from bokeh.models.glyphs import ImageURL
-from bokeh.models import ColumnDataSource
+
 def plotScheme( GraphInstance ):
     """
      At the beginning the function cleans the GraphInstance from the previous plot. Then
@@ -715,17 +716,28 @@ def plotScheme( GraphInstance ):
     :param GraphInstance: an instance of GraphObject class
     :return:
     """
+    """ 
+    scheme = "./static/images/scheme.png"
+    #source = ColumnDataSource(dict(url = [scheme]))
+    img = imread(scheme, mode='L')
     GraphInstance.cleanGraph( )
     GraphInstance.Graph.yaxis.axis_label = ""
     GraphInstance.Graph.xaxis.axis_label = ""
     
+    
+    #GraphInstance.Graph.image_url(url="scheme", x = 0, y = 0, w = 1, h = 1, source = source )
+    
+    GraphInstance.GraphData[ 1 ].data \
+        = 
+    
+    """
+    """
     Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
                         "<img src='/VibroacousticApp/static/images/scheme.png'>",
                 width = 550,
                 height = 550 )
-
-    plot.add_glyph(Scheme)
-
+    
+    """
     #print "hello"
     pass
 
