@@ -213,6 +213,7 @@ class GraphObject:
 
         :return:
         """
+        self.LegendItems = [ ]
         for i in range( GraphObject._MAX_NUMBER_OF_LINES ):
             self.Graph.legend[ 0 ].items[ i ].label[ 'value' ] = ""
             self.GraphData[ i ].data = dict(XData = [], YData = [])

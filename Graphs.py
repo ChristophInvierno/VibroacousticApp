@@ -2,7 +2,7 @@ from Colors import *
 from bokeh.models.annotations import LegendItem
 import numpy as np
 from bokeh.plotting import figure
-from bokeh.models.glyphs import ImageURL
+from bokeh.models.glyphs import ImageURL, Image, ImageRGBA
 from bokeh.models import ColumnDataSource
 from scipy.misc import imread
 
@@ -716,6 +716,7 @@ def plotScheme( GraphInstance ):
     :param GraphInstance: an instance of GraphObject class
     :return:
     """
+    GraphInstance.cleanGraph( )
     """ 
     scheme = "./static/images/scheme.png"
     #source = ColumnDataSource(dict(url = [scheme]))
@@ -725,7 +726,7 @@ def plotScheme( GraphInstance ):
     GraphInstance.Graph.xaxis.axis_label = ""
     
     
-    #GraphInstance.Graph.image_url(url="scheme", x = 0, y = 0, w = 1, h = 1, source = source )
+    GraphInstance.Graph.image_url(url="scheme", x = 0, y = 0, w = 1, h = 1, source = source )
     
     GraphInstance.GraphData[ 1 ].data \
         = 
@@ -738,6 +739,9 @@ def plotScheme( GraphInstance ):
                 height = 550 )
     
     """
+    scheme = 'C:\Users\carme\Documents\GitHub\VibroacousticApp\static\images\scheme.png'
+    img = imread(scheme, mode='RGBA')
+    GraphInstance.Graph.image_rgba(img, x = 0, y = 0, w = 10, h = 10)
     #print "hello"
     pass
 

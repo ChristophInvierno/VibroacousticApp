@@ -46,7 +46,8 @@ def main( ):
                            "Modes in Band",
                            "Modal Density",
                            "Modal Overlap Factor",
-                           "Maximum Element Size (FEM)"],
+                           "Maximum Element Size (FEM)",
+                           "Scheme"],
                             FrequencyRange,
                             Width = 850,
                             Height = 550)
@@ -59,6 +60,7 @@ def main( ):
                             "ModalOverlapFactor",
                             "MaxElementSize",
                             "EigenFrequency",
+                            "Scheme"
                             ])
 
 
@@ -571,6 +573,7 @@ def updateGraph( Graph, GraphNumber ):
         plotMaximumElementSize( Graph )
 
     if (GraphNumber == 6):
+        
         plotScheme ( Graph )
         #Scheme = Div( text = "<p><b><center><font size=4> Layout scheme </font></center></b></p>"
         #                "<img src='/VibroacousticApp/static/images/scheme.png'>",
