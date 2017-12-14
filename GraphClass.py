@@ -215,7 +215,7 @@ class GraphObject:
         """
         self.LegendItems = [ ]
         for i in range( GraphObject._MAX_NUMBER_OF_LINES ):
-            self.Graph.legend[ 0 ].items[ i ].label[ 'value' ] = ""
+            self.Graph.legend[ 0 ].items[ i ] = LegendItem( label = "" ) #self.Graph.legend[ 0 ].items[ i ].label[ 'value' ] = ""
             self.GraphData[ i ].data = dict(XData = [], YData = [])
             self.Lines[ i ].glyph.line_color = 'white'
 
@@ -245,7 +245,7 @@ class GraphObject:
 
         self.Lines[ ID ].glyph.line_color = Color
         self.Lines[ ID ].glyph.line_dash = Style
-        self.Graph.legend[ 0 ].items[ ID ].label[ 'value' ] = Name
+        self.Graph.legend[ 0 ].items[ ID ] = LegendItem( label = Name, renderers = [ self.Lines[ ID ] ] ) #self.Graph.legend[ 0 ].items[ ID ].label[ 'value' ] = Name
 
 
     def defineContainers(self, Keys = None):
