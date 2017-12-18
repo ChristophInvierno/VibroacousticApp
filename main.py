@@ -193,7 +193,7 @@ def main( ):
                                            Rows =  1,
                                            Columns =  3 )
 
-    GeometryProperties.setTitels( [ [ "Length", "Width", "Thickness of the layers*" ] ] )
+    GeometryProperties.setTitels( [ [ "Length", "Width", "Thicknesses of the layers*" ] ] )
 
     Data = [ [ "2.5", "3.0", "0.027" ] ]
     GeometryProperties.setValues( Data )
@@ -265,7 +265,7 @@ def main( ):
                               MessageHeader = "Warning: " )
 
 
-    Info = Div( text = "*Thickness of top to center layer separated by "
+    Info = Div( text = "*Thickness of the top to the center layer separated by "
                        "semicolon or space: <br>"
 					   "&nbsp;Symmetric cross section with odd number of layers"
                        " and crosswise layup assumed.",
@@ -279,22 +279,26 @@ def main( ):
      #           width = 550,
      #           height = 550 )
     
-    Description = Div( text = "The handling of the application can be classified in three steps: <br><br>"
-                "<b>1.</b> Inserting of physical properties of a homogenous plate or of a single layer"
-                "&nbsp;on the left (default values are given) and pressing <i>'Apply'</i>. <br><br>"
-                "<b>2.</b> In the case of a layered plate, the material properties are"
-                "homogenized through the thickness. Thus, the input data of the single layers"
+    Description = Div( text = "The application Vibroacoustics of Plates can be classified in two steps: <br><br>"
+                "<b>1.</b> Insert the physical properties of a homogenous plate or of a single layer"
+                "&nbsp;in the case of a layered plate (default values are given) on the left and press <i>'Apply'</i>. <br><br>"
+                "<b>Notice</b> that in the case of a layered plate, a symmetric cross section"
+                "&nbsp;with an odd number of layers and a crosswise layup is assumed (cf. Scheme)."
+                "&nbsp;Therefore, the thicknesses of the top to the center layer have to be inserted."
+                "&nbsp;The material properties are homogenized through the thickness."
+                "&nbsp;Thus, the input data of the single layer"
                 "&nbsp;is overwritten by homogenized material parameters of the plate after pressing <i>'Apply'</i>."
                 "&nbsp;The input data of the single layers can be checked by pressing the"
                 "&nbsp;button <i>'Show Input'</i>. <br><br>"
-                "<b>3.</b> On the right, the various results listed above can be studied"
+                "<b>2.</b> On the right, dynamic properties of the plate and of"
+                "&nbsp;its wave types are plotted. These can be studied"
                 "&nbsp;using e.g. the zoom function and saved as .png."
 					   ,
                 render_as_text = False,
                 width = 1200,
                 height = 30 )
     
-    Title = Div ( text = "<b><h1> VIBROACOUSTIC OF PLATES</b><h1>",
+    Title = Div ( text = "<b><h1> VIBROACOUSTICS OF PLATES</b><h1>",
                  render_as_text = False,
                  width = 1200,
                  height = 30)
